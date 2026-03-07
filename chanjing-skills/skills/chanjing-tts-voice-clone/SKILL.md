@@ -20,6 +20,7 @@ This TTS service supports:
 Chanjing-TTS-Voice-Clone provides an asynchronous speech synthesis API.
 Hostname for all APIs is: "https://open-api.chanjing.cc".
 All requests communicate using json.
+You should use utf-8 to encode and decode text throughout this task.
 
 1. Obtain an access\_token, which is required for subsequent requests
 2. Call the Create Voice API, which accepts a url to an audio file as reference voice

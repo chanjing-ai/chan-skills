@@ -20,6 +20,7 @@ Chanjing TTS supports:
 
 Multiple APIs need to be invoked. All share the domain: "https://open-api.chanjing.cc".
 All requests communicate using json.
+You should use utf-8 to encode and decode text throughout this task.
 
 1. Obtain an `access_token`, which is required for all subsequent API calls
 2. List all voice IDs and select one to use
