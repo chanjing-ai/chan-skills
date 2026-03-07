@@ -1,4 +1,3 @@
-```markdown
 ---
 name: chanjing-avatar
 description: Use Chanjing Avatar API for lip-syncing video generation
