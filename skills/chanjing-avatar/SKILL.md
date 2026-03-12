@@ -101,9 +101,9 @@ Query params:
 | service | lip_sync_video / lip_sync_audio | File usage purpose. Use `lip_sync_video` for driving video, `lip_sync_audio` for audio (if audio-driven). |
 | name | 1.mp4 | Original file name including extension |
 
-You will get a response containing `sign_url`, `mime_type`, and `file_id`. Use the `sign_url` with HTTP `PUT` to upload the file, setting `Content-Type` to the returned `mime_type`. After the upload succeeds, keep the returned `file_id`; this is what you pass as `video_file_id` / `audio_file_id` below.
+You will get a response containing `sign_url`, `mime_type`, and `file_id`. Use the `sign_url` with HTTP `PUT` to upload the file, setting `Content-Type` to the returned `mime_type`. After the PUT completes, **poll the file detail API** until the file is ready (do not assume a fixed wait). Keep the returned `file_id` for `video_file_id` / `audio_file_id` below.
 
-**Note:** Newly uploaded files may take up to about 1 minute before they become fully available.
+**Polling:** Call `GET /open/v1/common/file_detail?id={{file_id}}` with `access_token` until the response `data.status` indicates success (e.g. `status === 2`). Only then use the `file_id` for the create task API.
 
 ### Create Lip-Syncing Task
 
@@ -342,7 +342,7 @@ When a callback URL is provided, the system will send a POST request when the ta
 | 脚本 | 说明 |
 |------|------|
 | `get_upload_url` | 获取上传链接，输出 `sign_url`、`mime_type`、`file_id` |
-| `upload_file` | 上传本地文件并输出 `file_id` |
+| `upload_file` | 上传本地文件，轮询 file_detail 直到就绪后输出 `file_id` |
 | `create_task` | 创建对口型任务（TTS 或音频驱动），输出视频任务 id |
 | `poll_task` | 轮询任务直到完成，输出 `video_url` |
 
