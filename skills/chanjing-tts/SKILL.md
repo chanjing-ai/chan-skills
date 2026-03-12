@@ -18,6 +18,8 @@ Chanjing TTS supports:
 
 ## How to Use This Skill
 
+**前置条件（权限验证）**：执行本 Skill 前，必须先通过 **chanjing-credentials-guard** 完成 AK/SK 与 Token 校验。本 Skill 与 guard 使用同一套凭证（`~/.chanjing/credentials.json`）；脚本在无凭证时会**执行 `open_login_page` 脚本**，在默认浏览器打开 AK/SK 注册/登录页，并提示配置命令。
+
 Multiple APIs need to be invoked. All share the domain: "https://open-api.chanjing.cc".
 All requests communicate using json.
 You should use utf-8 to encode and decode text throughout this task.
@@ -29,17 +31,19 @@ You should use utf-8 to encode and decode text throughout this task.
 
 ### Obtain AccessToken
 
+从 `~/.chanjing/credentials.json` 读取 `app_id` 和 `secret_key`，若无有效 Token 则调用：
+
 ```http
 POST /open/v1/access_token
 Content-Type: application/json
 ```
 
-Use the following hard-coded request body:
+请求体（使用本地配置的 app_id、secret_key）：
 
 ```json
 {
-  "app_id": "84042cb5",
-  "secret_key": "10cd5091fe6042dfb91ba01816a991e0"
+  "app_id": "<从 credentials.json 读取>",
+  "secret_key": "<从 credentials.json 读取>"
 }
 ```
 
@@ -366,3 +370,28 @@ Response status code description:
 | 10400 | AccessToken verification failed |
 | 40000 | Parameter error |
 | 50000 | System internal error |
+
+## Scripts
+
+本 Skill 提供脚本（`skills/chanjing-tts/scripts/`），**带权限验证**：与 **chanjing-credentials-guard** 使用同一配置文件；无 AK/SK 时会**执行 guard 的 `open_login_page` 脚本**，在浏览器打开注册/登录页，并提示配置命令。
+
+| 脚本 | 说明 |
+|------|------|
+| `list_voices` | 列出公共声音人，默认输出 id/name 表，可选 `--json` 输出完整数据 |
+| `create_task` | 创建 TTS 任务，输出 task_id |
+| `poll_task` | 轮询任务直到完成，输出音频下载 URL（full.url） |
+
+示例（在项目根或 skill 目录下执行）：
+
+```bash
+# 1. 列出可用声音，选取一个 id
+python skills/chanjing-tts/scripts/list_voices
+
+# 2. 创建合成任务
+TASK_ID=$(python skills/chanjing-tts/scripts/create_task \
+  --audio-man "f9248f3b1b42447fb9282829321cfcf2" \
+  --text "Hello, I am your AI assistant.")
+
+# 3. 轮询到完成，得到音频下载链接
+python skills/chanjing-tts/scripts/poll_task --task-id "$TASK_ID"
+```

@@ -17,6 +17,8 @@ This TTS service supports:
 
 ## How to Use This Skill
 
+**前置条件（权限验证）**：执行本 Skill 前，必须先通过 **chanjing-credentials-guard** 完成 AK/SK 与 Token 校验。脚本与 guard 使用同一套凭证；无凭证时会执行 `open_login_page` 打开注册/登录页。
+
 Chanjing-TTS-Voice-Clone provides an asynchronous speech synthesis API.
 Hostname for all APIs is: "https://open-api.chanjing.cc".
 All requests communicate using json.
@@ -31,19 +33,19 @@ You should use utf-8 to encode and decode text throughout this task.
 
 ### Get Access Token API
 
-Post a request to:
+从 `~/.chanjing/credentials.json` 读取 `app_id` 和 `secret_key`，若无有效 Token 则调用：
 
 ```http
 POST /open/v1/access_token
 Content-Type: application/json
 ```
 
-Use the following hard-coded json body:
+请求体（使用本地配置的 app_id、secret_key）：
 
 ```json
 {
-  "app_id": "84042cb5",
-  "secret_key": "10cd5091fe6042dfb91ba01816a991e0"
+  "app_id": "<从 credentials.json 读取>",
+  "secret_key": "<从 credentials.json 读取>"
 }
 ```
 
@@ -393,3 +395,30 @@ Response field description:
 | 10400 | AccessToken verification failed |
 | 40000 | Parameter error |
 | 50000 | System internal error |
+
+## Scripts
+
+本 Skill 提供脚本（`skills/chanjing-tts-voice-clone/scripts/`），与 **chanjing-credentials-guard** 使用同一配置文件；无 AK/SK 时会**执行 `open_login_page` 脚本**打开注册/登录页。
+
+| 脚本 | 说明 |
+|------|------|
+| `create_voice` | 提交定制声音任务（参考音频 URL），输出 voice_id |
+| `poll_voice` | 轮询定制声音直到就绪（status=2），输出 voice_id |
+| `create_task` | 使用定制声音创建 TTS 任务，输出 task_id |
+| `poll_task` | 轮询 TTS 任务直到完成，输出音频下载 URL |
+
+示例（在项目根或 skill 目录下执行）：
+
+```bash
+# 1. 创建定制声音（参考音频需为公开 URL）
+VOICE_ID=$(python skills/chanjing-tts-voice-clone/scripts/create_voice --name "我的声音" --url "https://example.com/ref.mp3")
+
+# 2. 轮询直到声音就绪
+python skills/chanjing-tts-voice-clone/scripts/poll_voice --voice-id "$VOICE_ID"
+
+# 3. 创建 TTS 任务
+TASK_ID=$(python skills/chanjing-tts-voice-clone/scripts/create_task --audio-man "$VOICE_ID" --text "Hello, I am your AI assistant.")
+
+# 4. 轮询到完成，得到音频下载链接
+python skills/chanjing-tts-voice-clone/scripts/poll_task --task-id "$TASK_ID"
+```

@@ -1,0 +1,15 @@
+#!/usr/bin/env python3
+"""
+打开蝉镜 AK/SK 注册/登录页面。无参数直接运行即可。
+用法: python open_login_page  或  python skills/chanjing-credentials-guard/scripts/open_login_page
+"""
+import webbrowser
+
+LOGIN_URL = "https://www.chanjing.cc?channel=cursor"
+
+if __name__ == "__main__":
+    webbrowser.open(LOGIN_URL)
+    print("已在浏览器打开蝉镜登录/注册页。")
+    print("获取秘钥后请执行：")
+    print("  python skills/chanjing-credentials-guard/scripts/chanjing-config --ak <你的app_id> --sk <你的secret_key>")
+    print("设置完毕后请重新执行您之前的操作。")

@@ -1,0 +1,69 @@
+#!/usr/bin/env python3
+"""
+使用定制声音创建 TTS 语音合成任务。voice_id 需先通过 create_voice + poll_voice 获得。
+与 chanjing-credentials-guard 使用同一配置文件；无 AK/SK 时执行 open_login_page 打开登录页。
+用法: create_task --audio-man <voice_id> --text "要合成的文本" [--speed 1] [--pitch 1] [--aigc-watermark]
+输出: task_id（一行）或错误到 stderr
+"""
+import argparse
+import json
+import sys
+import urllib.request
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from _auth import get_token
+
+API_BASE = __import__("os").environ.get("CHANJING_API_BASE", "https://open-api.chanjing.cc")
+
+
+def main():
+    parser = argparse.ArgumentParser(description="使用定制声音创建 TTS 任务")
+    parser.add_argument("--audio-man", required=True, help="定制声音 ID（来自 poll_voice）")
+    parser.add_argument("--text", required=True, help="要合成的文本，不超过 4000 字")
+    parser.add_argument("--speed", type=float, default=1, help="语速 0.5-2，默认 1")
+    parser.add_argument("--pitch", type=float, default=1, help="语调，默认 1")
+    parser.add_argument("--aigc-watermark", action="store_true", help="是否添加 AIGC 水印")
+    args = parser.parse_args()
+
+    if len(args.text) > 4000:
+        print("文本长度不能超过 4000 字符", file=sys.stderr)
+        sys.exit(1)
+
+    body = {
+        "audio_man": args.audio_man.strip(),
+        "speed": args.speed,
+        "pitch": args.pitch,
+        "text": {"text": args.text},
+        "aigc_watermark": args.aigc_watermark,
+    }
+
+    token, err = get_token()
+    if err:
+        print(err, file=sys.stderr)
+        sys.exit(1)
+
+    url = f"{API_BASE}/open/v1/create_audio_task"
+    req = urllib.request.Request(
+        url,
+        data=json.dumps(body).encode("utf-8"),
+        headers={"access_token": token, "Content-Type": "application/json"},
+        method="POST",
+    )
+    with urllib.request.urlopen(req, timeout=30) as resp:
+        res = json.loads(resp.read().decode("utf-8"))
+
+    if res.get("code") != 0:
+        print(res.get("msg", res), file=sys.stderr)
+        sys.exit(1)
+
+    data = res.get("data", {})
+    task_id = data.get("task_id")
+    if not task_id:
+        print("响应无 task_id", file=sys.stderr)
+        sys.exit(1)
+    print(task_id)
+
+
+if __name__ == "__main__":
+    main()

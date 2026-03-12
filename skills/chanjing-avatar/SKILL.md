@@ -18,6 +18,8 @@ Chanjing Avatar supports:
 
 ## How to Use This Skill
 
+**前置条件**：执行本 Skill 前，必须先通过 **chanjing-credentials-guard** 完成 AK/SK 与 Token 校验。
+
 Multiple APIs need to be invoked. All share the domain: "https://open-api.chanjing.cc".
 All requests communicate using json.
 You should use utf-8 to encode and decode text throughout this task.
@@ -30,17 +32,19 @@ You should use utf-8 to encode and decode text throughout this task.
 
 ### Obtain AccessToken
 
+从 `~/.chanjing/credentials.json` 读取 `app_id` 和 `secret_key`，若无有效 Token 则调用：
+
 ```http
 POST /open/v1/access_token
 Content-Type: application/json
 ```
 
-Use the following hard-coded request body:
+请求体（使用本地配置的 app_id、secret_key）：
 
 ```json
 {
-  "app_id": "84042cb5",
-  "secret_key": "10cd5091fe6042dfb91ba01816a991e0"
+  "app_id": "<从 credentials.json 读取>",
+  "secret_key": "<从 credentials.json 读取>"
 }
 ```
 
@@ -330,6 +334,35 @@ When a callback URL is provided, the system will send a POST request when the ta
   }
 }
 ```
+
+## Scripts
+
+本 Skill 提供脚本（`skills/chanjing-avatar/scripts/`），与 **chanjing-credentials-guard** 使用同一配置文件（`~/.chanjing/credentials.json`）获取 Token。
+
+| 脚本 | 说明 |
+|------|------|
+| `get_upload_url` | 获取上传链接，输出 `sign_url`、`mime_type`、`file_id` |
+| `upload_file` | 上传本地文件并输出 `file_id` |
+| `create_task` | 创建对口型任务（TTS 或音频驱动），输出视频任务 id |
+| `poll_task` | 轮询任务直到完成，输出 `video_url` |
+
+示例（在项目根或 skill 目录下执行）：
+
+```bash
+# 1. 上传驱动视频，得到 video_file_id
+VIDEO_FILE_ID=$(python skills/chanjing-avatar/scripts/upload_file --service lip_sync_video --file ./my_video.mp4)
+
+# 2. 创建 TTS 对口型任务（需先通过 list_common_audio 获取 audio_man_id）
+TASK_ID=$(python skills/chanjing-avatar/scripts/create_task \
+  --video-file-id "$VIDEO_FILE_ID" \
+  --text "君不见黄河之水天上来" \
+  --audio-man-id "C-f2429d07554749839849497589199916")
+
+# 3. 轮询直到完成，得到视频下载链接
+python skills/chanjing-avatar/scripts/poll_task --id "$TASK_ID"
+```
+
+音频驱动时：先上传音频得到 `audio_file_id`，再 `create_task --video-file-id <id> --audio-file-id <audio_file_id>`。
 
 ## Response Status Code Description
 
