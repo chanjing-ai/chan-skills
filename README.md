@@ -29,6 +29,35 @@ cp scripts/git-hooks/post-merge .git/hooks/post-merge && chmod +x .git/hooks/pos
 
 Override the target with env `SKILLS_LINK_TARGET` (default: `/Users/molo/Projects/skills/.agents/skills`). The script is idempotent; new skills get linked when run again; broken links are removed.
 
+## Get and set API keys (Chan Jing / 蝉镜)
+
+Before using Chan Jing (蝉镜) skills (TTS, digital avatar, voice clone, etc.), configure **Access Key (app_id)** and **Secret Key (secret_key)**. See [chanjing-credentials-guard](skills/chanjing-credentials-guard/SKILL.md) for details.
+
+### Get API keys
+
+1. Open the Chan Jing sign-up/login page to obtain AK/SK:
+   ```bash
+   python skills/chanjing-credentials-guard/scripts/open_login_page
+   ```
+   Or open in a browser: <https://www.chanjing.cc?channel=cursor>  
+2. After signing up or logging in, create an API key in the console and copy **app_id** and **secret_key**.
+
+### Set API keys
+
+Run in your terminal (replace `<your_app_id>` and `<your_secret_key>` with your values):
+
+```bash
+python skills/chanjing-credentials-guard/scripts/chanjing-config --ak <your_app_id> --sk <your_secret_key>
+```
+
+Credentials are written to `~/.chanjing/credentials.json` (override the directory with env `CHANJING_CONFIG_DIR`). After setting, re-run your intended action.
+
+Check current config status:
+
+```bash
+python skills/chanjing-credentials-guard/scripts/chanjing-config --status
+```
+
 ## Available skills
 
 | Name | Description |
