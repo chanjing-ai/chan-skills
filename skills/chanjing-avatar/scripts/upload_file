@@ -17,8 +17,8 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from _auth import get_token
 
 API_BASE = __import__("os").environ.get("CHANJING_API_BASE", "https://open-api.chanjing.cc")
-# File status: poll file_detail until status indicates success (2 = available per common convention)
-FILE_STATUS_SUCCESS = 2
+# 官方文件管理文档里 1 表示文件可用；保留 2 以兼容历史状态定义。
+FILE_READY_STATUSES = {1, 2}
 POLL_INTERVAL_DEFAULT = 5
 POLL_TIMEOUT_DEFAULT = 300
 
@@ -35,7 +35,7 @@ def get_file_detail(token, file_id):
 
 
 def poll_file_ready(token, file_id, interval=5, timeout=300):
-    """Poll file_detail until status == FILE_STATUS_SUCCESS. Return (True, None) or (False, error_msg)."""
+    """Poll file_detail until the uploaded file is ready to use."""
     deadline = time.monotonic() + timeout
     while time.monotonic() < deadline:
         data, err = get_file_detail(token, file_id)
@@ -44,9 +44,9 @@ def poll_file_ready(token, file_id, interval=5, timeout=300):
         if data is None:
             return False, "no data"
         status = data.get("status")
-        if status == FILE_STATUS_SUCCESS:
+        if status in FILE_READY_STATUSES:
             return True, None
-        if status not in (0, 1, None):
+        if status not in (0, None):
             return False, data.get("msg") or f"file status={status}"
         time.sleep(interval)
     return False, "poll timeout"

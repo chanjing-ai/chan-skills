@@ -49,7 +49,7 @@ def main():
             "model": args.model,
             "audio_type": "tts",
             "tts_config": {
-                "text": args.text,
+                "text": [args.text],
                 "audio_man_id": args.audio_man_id,
                 "speed": args.speed,
                 "pitch": args.pitch,
