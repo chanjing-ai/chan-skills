@@ -47,7 +47,7 @@ AK/SK and Token are read from the **same config file**. Path and format follow t
 
 When local `app_id` or `secret_key` is missing:
 
-1. **Open login page**: Run the `open_login_page` script to open the Chanjing sign-in page in the default browser (`https://cmm-algo-chanjing-web-rc.limayao.com/api/login`).
+1. **Open login page**: Run the `open_login_page` script to open the Chanjing sign-in page in the default browser (`https://www.chanjing.cc/openapi/login`).
 2. **Show set AK/SK command**: Output the command for the user to run after obtaining keys.
 3. **After setting**: Tell the user to **re-run their previous action** (or the current command) so credentials are validated again.
 

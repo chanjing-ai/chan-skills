@@ -12,7 +12,7 @@ CONFIG_DIR = Path(os.environ.get("CHANJING_CONFIG_DIR", Path.home() / ".chanjing
 CONFIG_FILE = CONFIG_DIR / "credentials.json"
 API_BASE = os.environ.get("CHANJING_API_BASE", "https://open-api.chanjing.cc")
 BUFFER_SECONDS = 300
-LOGIN_URL = "https://cmm-algo-chanjing-web-rc.limayao.com/api/login"
+LOGIN_URL = "https://www.chanjing.cc/openapi/login"
 
 # 无 AK/SK 时先执行打开登录页脚本，再返回此提示
 NO_CREDENTIALS_MSG = """已在浏览器打开蝉镜登录/注册页。

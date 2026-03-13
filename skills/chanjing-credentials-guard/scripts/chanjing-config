@@ -12,7 +12,7 @@ from pathlib import Path
 
 CONFIG_DIR = Path(os.environ.get("CHANJING_CONFIG_DIR", Path.home() / ".chanjing"))
 CONFIG_FILE = CONFIG_DIR / "credentials.json"
-LOGIN_URL = "https://cmm-algo-chanjing-web-rc.limayao.com/api/login"
+LOGIN_URL = "https://www.chanjing.cc/openapi/login"
 DOC_URL = "https://doc.chanjing.cc"
 
 

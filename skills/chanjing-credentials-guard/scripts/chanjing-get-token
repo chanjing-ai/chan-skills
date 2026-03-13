@@ -27,11 +27,11 @@ def _run_open_login_page():
             subprocess.run([sys.executable, str(script)], check=False, timeout=5)
         else:
             import webbrowser
-            webbrowser.open("https://cmm-algo-chanjing-web-rc.limayao.com/api/login")
+            webbrowser.open("https://www.chanjing.cc/openapi/login")
     except Exception:
         try:
             import webbrowser
-            webbrowser.open("https://cmm-algo-chanjing-web-rc.limayao.com/api/login")
+            webbrowser.open("https://www.chanjing.cc/openapi/login")
         except Exception:
             pass
 

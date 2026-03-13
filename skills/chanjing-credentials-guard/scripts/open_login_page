@@ -8,7 +8,7 @@ import shutil
 import subprocess
 import webbrowser
 
-LOGIN_URL = "https://cmm-algo-chanjing-web-rc.limayao.com/api/login"
+LOGIN_URL = "https://www.chanjing.cc/openapi/login"
 
 
 def _run_open_command(command, method_name):
