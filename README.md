@@ -39,7 +39,7 @@ Before using Chan Jing (蝉镜) skills (TTS, digital avatar, voice clone, etc.),
    ```bash
    python skills/chanjing-credentials-guard/scripts/open_login_page
    ```
-   Or open in a browser: <https://www.chanjing.cc?channel=cursor>  
+   Or open in a browser: <https://www.chanjing.cc/openapi/login>  
 2. After signing up or logging in, create an API key in the console and copy **app_id** and **secret_key**.
 
 ### Set API keys

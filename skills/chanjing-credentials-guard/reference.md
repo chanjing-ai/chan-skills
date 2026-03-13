@@ -63,6 +63,5 @@ File path: `~/.chanjing/credentials.json` (default; override with env `CHANJING_
 
 ## Login and obtaining keys
 
-- Sign up / Login: https://www.chanjing.cc
+- Sign up / Login: https://www.chanjing.cc/openapi/login
 - Docs: https://doc.chanjing.cc
-- Channel param: `?channel=cursor` for attribution
