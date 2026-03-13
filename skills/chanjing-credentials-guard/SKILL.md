@@ -47,7 +47,7 @@ AK/SK and Token are read from the **same config file**. Path and format follow t
 
 When local `app_id` or `secret_key` is missing:
 
-1. **Open login page**: Run the `open_login_page` script to open the Chanjing sign-up/login page in the default browser (https://www.chanjing.cc?channel=cursor).
+1. **Open login page**: Run the `open_login_page` script to open the Chanjing sign-in page in the default browser (`https://cmm-algo-chanjing-web-rc.limayao.com/api/login`).
 2. **Show set AK/SK command**: Output the command for the user to run after obtaining keys.
 3. **After setting**: Tell the user to **re-run their previous action** (or the current command) so credentials are validated again.
 
@@ -78,12 +78,15 @@ Check if local AK/SK already exists (read `~/.chanjing/credentials.json` for non
 
 ### Guide steps (when not configured or user confirmed re-apply)
 
-1. **Run `open_login_page`** to open the Chanjing sign-up/login page in the default browser so the user can register/login and create an API key.
-2. **Output the set AK/SK command** and tell the user to run it in the terminal after obtaining app_id and secret_key:
+1. **Run `open_login_page`** to open the Chanjing login page in the default browser.
+2. **Explain the page flow clearly**:
+   - New users are registered automatically and the current page will display `App ID` and `Secret Key` with copy buttons.
+   - Existing users may be redirected to the console; tell them to open the left-side **API 密钥** page to view or reset keys.
+3. **Output the set AK/SK command** and tell the user to run it in the terminal after obtaining `app_id` and `secret_key`:
    ```bash
    python skills/chanjing-credentials-guard/scripts/chanjing-config --ak <your_app_id> --sk <your_secret_key>
    ```
-3. **After setting**: Config is saved and Chanjing skills can be used; if this was triggered by another action, the user can re-run that action. For re-apply, the command above overwrites the existing config.
+4. **After setting**: Config is saved and Chanjing skills can be used; if this was triggered by another action, the user can re-run that action. For re-apply, the command above overwrites the existing config.
 
 You can run `python skills/chanjing-credentials-guard/scripts/open_login_page` first to open the login page, then paste the config command in the conversation.
 
@@ -129,7 +132,7 @@ Response (success `code: 0`):
 
 | Script | Description |
 |--------|-------------|
-| `open_login_page` | Opens Chanjing AK/SK sign-up/login page in default browser |
+| `open_login_page` | Opens the Chanjing login page and explains how new/existing users obtain AK/SK |
 | `chanjing-config` | Set or view AK/SK and Token status |
 
 ```bash

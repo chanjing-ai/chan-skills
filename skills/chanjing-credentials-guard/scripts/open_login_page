@@ -5,11 +5,21 @@
 """
 import webbrowser
 
-LOGIN_URL = "https://www.chanjing.cc?channel=cursor"
+LOGIN_URL = "https://cmm-algo-chanjing-web-rc.limayao.com/api/login"
 
-if __name__ == "__main__":
+
+def main():
     webbrowser.open(LOGIN_URL)
-    print("已在浏览器打开蝉镜登录/注册页。")
-    print("获取秘钥后请执行：")
+    print("已在浏览器打开蝉镜登录页。")
+    print()
+    print("获取 AK/SK 的方式：")
+    print("1. 新用户：注册成功后，当前页面会直接展示 App ID 和 Secret Key，可点击复制按钮。")
+    print("2. 老用户：登录后如果进入控制台，请在左侧菜单进入“API 密钥”页面查看或重置密钥。")
+    print()
+    print("拿到秘钥后请执行：")
     print("  python skills/chanjing-credentials-guard/scripts/chanjing-config --ak <你的app_id> --sk <你的secret_key>")
     print("设置完毕后请重新执行您之前的操作。")
+
+
+if __name__ == "__main__":
+    main()
