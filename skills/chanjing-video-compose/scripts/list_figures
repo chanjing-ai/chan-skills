@@ -1,0 +1,69 @@
+#!/usr/bin/env python3
+"""
+列出可用于视频合成的数字人形象。
+用法: list_figures [--page 1] [--page-size 20] [--json]
+输出: 默认打印摘要表；--json 时输出完整 data
+"""
+import argparse
+import json
+import sys
+import urllib.request
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from _auth import get_token
+
+API_BASE = __import__("os").environ.get("CHANJING_API_BASE", "https://open-api.chanjing.cc")
+
+
+def main():
+    parser = argparse.ArgumentParser(description="列出蝉镜视频合成可用数字人形象")
+    parser.add_argument("--page", type=int, default=1, help="页码")
+    parser.add_argument("--page-size", type=int, default=20, help="每页数量")
+    parser.add_argument("--json", action="store_true", help="输出完整 JSON")
+    args = parser.parse_args()
+
+    token, err = get_token()
+    if err:
+        print(err, file=sys.stderr)
+        sys.exit(1)
+
+    body = json.dumps({"page": args.page, "page_size": args.page_size}).encode("utf-8")
+    req = urllib.request.Request(
+        f"{API_BASE}/open/v1/list_customised_person",
+        data=body,
+        headers={"access_token": token, "Content-Type": "application/json"},
+        method="POST",
+    )
+    with urllib.request.urlopen(req, timeout=30) as resp:
+        res = json.loads(resp.read().decode("utf-8"))
+
+    if res.get("code") != 0:
+        print(res.get("msg", res), file=sys.stderr)
+        sys.exit(1)
+
+    data = res.get("data", {})
+    if args.json:
+        print(json.dumps(data, ensure_ascii=False, indent=2))
+        return
+
+    items = data.get("list", [])
+    page_info = data.get("page_info", {})
+    print(f"# 共 {page_info.get('total_count', len(items))} 个形象 (page={args.page})")
+    print(
+        f"{'id':<36}  {'name':<14}  {'audio_man_id':<36}  "
+        f"{'4k':<5}  preview_url"
+    )
+    print("-" * 150)
+    for item in items:
+        print(
+            f"{item.get('id', ''):<36}  "
+            f"{item.get('name', ''):<14}  "
+            f"{item.get('audio_man_id', ''):<36}  "
+            f"{str(item.get('support_4k', '')):<5}  "
+            f"{item.get('preview_url', '')}"
+        )
+
+
+if __name__ == "__main__":
+    main()

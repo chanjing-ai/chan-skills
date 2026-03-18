@@ -1,0 +1,67 @@
+#!/usr/bin/env python3
+"""
+列出定制数字人形象。
+用法: list_persons [--page 1] [--page-size 20] [--json]
+默认输出: 制表分隔的摘要表
+"""
+import argparse
+import json
+import sys
+import urllib.request
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from _auth import get_token
+
+API_BASE = __import__("os").environ.get("CHANJING_API_BASE", "https://open-api.chanjing.cc")
+
+
+def main():
+    parser = argparse.ArgumentParser(description="列出定制数字人形象")
+    parser.add_argument("--page", type=int, default=1, help="页码，默认 1")
+    parser.add_argument("--page-size", type=int, default=20, help="每页数量，默认 20")
+    parser.add_argument("--json", action="store_true", help="输出完整 JSON")
+    args = parser.parse_args()
+
+    token, err = get_token()
+    if err:
+        print(err, file=sys.stderr)
+        sys.exit(1)
+
+    body = {"page": args.page, "page_size": args.page_size}
+    req = urllib.request.Request(
+        f"{API_BASE}/open/v1/list_customised_person",
+        data=json.dumps(body).encode("utf-8"),
+        headers={"access_token": token, "Content-Type": "application/json"},
+        method="POST",
+    )
+    with urllib.request.urlopen(req, timeout=30) as resp:
+        result = json.loads(resp.read().decode("utf-8"))
+
+    if result.get("code") != 0:
+        print(result.get("msg", result), file=sys.stderr)
+        sys.exit(1)
+
+    if args.json:
+        print(json.dumps(result, ensure_ascii=False))
+        return
+
+    items = result.get("data", {}).get("list", [])
+    if not items:
+        return
+
+    for item in items:
+        columns = [
+            item.get("id", ""),
+            item.get("name", ""),
+            str(item.get("status", "")),
+            str(item.get("progress", "")),
+            item.get("audio_man_id", "") or "",
+            str(item.get("support_4k", False)).lower(),
+            item.get("preview_url", "") or "",
+        ]
+        print("\t".join(columns))
+
+
+if __name__ == "__main__":
+    main()

@@ -1,0 +1,178 @@
+#!/usr/bin/env python3
+"""
+创建蝉镜视频合成任务。
+用法:
+  文本驱动:
+    create_task --person-id <id> --text "台词" --audio-man <声音id>
+  音频驱动:
+    create_task --person-id <id> --audio-file-id <file_id>
+    create_task --person-id <id> --wav-url https://example.com/demo.wav
+输出: video_id（一行）或错误到 stderr
+"""
+import argparse
+import json
+import sys
+import urllib.request
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from _auth import get_token
+
+API_BASE = __import__("os").environ.get("CHANJING_API_BASE", "https://open-api.chanjing.cc")
+
+
+def build_body(args):
+    if args.audio_file_id and args.wav_url:
+        raise ValueError("--audio-file-id 和 --wav-url 只能二选一")
+
+    person = {
+        "id": args.person_id,
+        "x": args.person_x,
+        "y": args.person_y,
+        "width": args.person_width,
+        "height": args.person_height,
+    }
+    if args.figure_type:
+        person["figure_type"] = args.figure_type
+
+    if args.audio_file_id or args.wav_url:
+        audio = {
+            "type": "audio",
+            "volume": args.volume,
+            "language": args.language,
+        }
+        if args.audio_file_id:
+            audio["file_id"] = args.audio_file_id
+        if args.wav_url:
+            audio["wav_url"] = args.wav_url
+    else:
+        if not args.text or not args.audio_man:
+            raise ValueError("文本驱动需同时提供 --text 和 --audio-man")
+        if len(args.text) > 4000:
+            raise ValueError("文本长度不能超过 4000 字符")
+        audio = {
+            "type": "tts",
+            "volume": args.volume,
+            "language": args.language,
+            "tts": {
+                "text": [args.text],
+                "speed": args.speed,
+                "audio_man": args.audio_man,
+                "pitch": args.pitch,
+            },
+        }
+
+    body = {
+        "person": person,
+        "audio": audio,
+        "bg_color": args.bg_color,
+        "screen_width": args.screen_width,
+        "screen_height": args.screen_height,
+        "model": args.model,
+        "backway": args.backway,
+        "add_compliance_watermark": args.add_compliance_watermark,
+        "compliance_watermark_position": args.compliance_watermark_position,
+        "resolution_rate": args.resolution_rate,
+    }
+
+    if args.drive_mode:
+        body["drive_mode"] = args.drive_mode
+    if args.callback:
+        body["callback"] = args.callback
+    if args.rgba_mode:
+        body["is_rgba_mode"] = True
+
+    if args.hide_subtitle:
+        body["subtitle_config"] = {"show": False}
+
+    if args.bg_file_id or args.bg_src_url:
+        bg = {
+            "x": args.bg_x,
+            "y": args.bg_y,
+            "width": args.bg_width,
+            "height": args.bg_height,
+        }
+        if args.bg_file_id:
+            bg["file_id"] = args.bg_file_id
+        if args.bg_src_url:
+            bg["src_url"] = args.bg_src_url
+        body["bg"] = bg
+
+    return body
+
+
+def main():
+    parser = argparse.ArgumentParser(description="创建蝉镜视频合成任务")
+    parser.add_argument("--person-id", required=True, help="数字人形象 ID（来自 list_figures）")
+    parser.add_argument("--text", help="文本驱动时的台词")
+    parser.add_argument("--audio-man", help="文本驱动时的声音 ID，默认可用 list_figures 返回的 audio_man_id")
+    parser.add_argument("--audio-file-id", help="音频驱动文件 ID（来自 upload_file）")
+    parser.add_argument("--wav-url", help="音频驱动的远端音频链接")
+    parser.add_argument("--person-x", type=int, default=0, help="人物 x 坐标")
+    parser.add_argument("--person-y", type=int, default=0, help="人物 y 坐标")
+    parser.add_argument("--person-width", type=int, default=1080, help="人物宽度")
+    parser.add_argument("--person-height", type=int, default=1920, help="人物高度")
+    parser.add_argument("--figure-type", help="公共数字人形态，如 sit_body / whole_body")
+    parser.add_argument("--drive-mode", choices=["random"], help="驱动模式；不传表示正常驱动")
+    parser.add_argument("--backway", type=int, choices=[1, 2], default=1, help="人物素材播放顺序")
+    parser.add_argument("--rgba-mode", action="store_true", help="生成四通道 webm 视频")
+    parser.add_argument("--screen-width", type=int, default=1080, help="画布宽度")
+    parser.add_argument("--screen-height", type=int, default=1920, help="画布高度")
+    parser.add_argument("--model", type=int, choices=[0, 1], default=0, help="0 基础版，1 高质版")
+    parser.add_argument("--resolution-rate", type=int, choices=[0, 1], default=0, help="0 为 1080p，1 为 4K")
+    parser.add_argument("--speed", type=float, default=1, help="TTS 语速 0.5-2")
+    parser.add_argument("--pitch", type=float, default=1, help="TTS 音调")
+    parser.add_argument("--volume", type=int, default=100, help="音量 1-100")
+    parser.add_argument("--language", default="cn", help="语言类型，默认 cn")
+    parser.add_argument("--bg-color", default="#EDEDED", help="纯色背景，默认 #EDEDED")
+    parser.add_argument("--bg-file-id", help="背景素材 file_id（来自 upload_file）")
+    parser.add_argument("--bg-src-url", help="背景图片远端链接，仅支持 jpg/png")
+    parser.add_argument("--bg-x", type=int, default=0, help="背景 x 坐标")
+    parser.add_argument("--bg-y", type=int, default=0, help="背景 y 坐标")
+    parser.add_argument("--bg-width", type=int, default=1080, help="背景宽度")
+    parser.add_argument("--bg-height", type=int, default=1920, help="背景高度")
+    parser.add_argument("--hide-subtitle", action="store_true", help="隐藏字幕")
+    parser.add_argument("--callback", help="任务完成回调 URL")
+    parser.add_argument("--add-compliance-watermark", action="store_true", help="添加 AI 合规水印")
+    parser.add_argument(
+        "--compliance-watermark-position",
+        type=int,
+        choices=[0, 1, 2, 3],
+        default=0,
+        help="合规水印位置：0 左上，1 右上，2 左下，3 右下",
+    )
+    args = parser.parse_args()
+
+    try:
+        body = build_body(args)
+    except ValueError as exc:
+        print(str(exc), file=sys.stderr)
+        sys.exit(1)
+
+    token, err = get_token()
+    if err:
+        print(err, file=sys.stderr)
+        sys.exit(1)
+
+    req = urllib.request.Request(
+        f"{API_BASE}/open/v1/create_video",
+        data=json.dumps(body).encode("utf-8"),
+        headers={"access_token": token, "Content-Type": "application/json"},
+        method="POST",
+    )
+    with urllib.request.urlopen(req, timeout=30) as resp:
+        res = json.loads(resp.read().decode("utf-8"))
+
+    if res.get("code") != 0:
+        print(res.get("msg", res), file=sys.stderr)
+        sys.exit(1)
+
+    video_id = res.get("data")
+    if not video_id:
+        print("响应无 data", file=sys.stderr)
+        sys.exit(1)
+    print(video_id)
+
+
+if __name__ == "__main__":
+    main()
