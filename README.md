@@ -2,6 +2,8 @@
 
 Chan Openclaw skills for E-Commerce content creation (practical AI tools and skills).
 
+中文版本见 [README.zh-CN.md](README.zh-CN.md)。
+
 ## Install
 
 ```bash
