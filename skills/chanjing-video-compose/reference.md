@@ -136,7 +136,26 @@ POST /open/v1/create_video
 * `model`: `0` 基础版，`1` 高质版
 * `resolution_rate`: `0` 为 1080p，`1` 为 4K
 * `subtitle_config.show`: 是否显示字幕
+* `subtitle_config.x`: 字幕区域起始 x 坐标，默认推荐 `31`（4K 推荐 `80`）
+* `subtitle_config.y`: 字幕区域起始 y 坐标，默认推荐 `1521`（4K 推荐 `2840`）
+* `subtitle_config.width`: 字幕显示范围宽度，默认推荐 `1000`（4K 推荐 `2000`）
+* `subtitle_config.height`: 字幕显示范围高度，默认推荐 `200`（4K 推荐 `1000`）
+* `subtitle_config.font_size`: 字幕字号，默认推荐 `64`（4K 推荐 `150`）
+* `subtitle_config.color`: 字幕颜色，格式 `#RRGGBB`
+* `subtitle_config.stroke_color`: 字幕描边颜色，格式 `#RRGGBB`
+* `subtitle_config.stroke_width`: 字幕描边宽度，推荐 `7`
+* `subtitle_config.font_id`: 字幕字体 ID
+* `subtitle_config.asr_type`: 字幕时间戳来源，`0` 自动生成，`1` 用户输入
 * `callback`: 任务完成回调 URL
+
+脚本约定：
+
+* `create_task --subtitle show` 会传 `subtitle_config.show=true`
+* 若未额外传字幕位置和样式参数，`create_task --subtitle show` 会自动补齐官方推荐默认值：1080p 为 `31/1521/1000/200/64/7/0`，4K 画布为 `80/2840/2000/1000/150/7/0`
+* `create_task --subtitle hide` 会传 `subtitle_config.show=false`
+* `create_task --hide-subtitle` 兼容旧用法，也会传 `subtitle_config.show=false`
+* `create_task` 支持通过 `--subtitle-x` / `--subtitle-y` / `--subtitle-width` / `--subtitle-height` / `--subtitle-font-size` / `--subtitle-color` / `--subtitle-stroke-color` / `--subtitle-stroke-width` / `--subtitle-font-id` / `--subtitle-asr-type` 覆盖默认字幕配置中的任意字段
+* 若用户只确认“显示字幕”而未指定位置，代理应直接使用默认值；若用户要求“字幕更高一点”“靠左一点”等，再结合左上角原点规则追问具体坐标或给出建议值
 
 ### Constraints and caveats
 
@@ -145,6 +164,7 @@ POST /open/v1/create_video
 * 背景图仅支持 `jpg` / `png`
 * 使用公共数字人时，先从 `figures[]` 中选定具体 `type`，再把对应的宽高映射到 `person.width` / `person.height`
 * 开启 `resolution_rate=1` 时，最好先确认数字人 `support_4k=true`
+* 字幕坐标以左上角为原点；若传 `subtitle_config.x/y/width/height`，应确保字幕区域不超出屏幕范围
 * 下载不应由创建或轮询脚本自动触发
 
 ## Poll Detail Notes
