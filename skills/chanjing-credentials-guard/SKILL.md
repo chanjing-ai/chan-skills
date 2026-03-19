@@ -1,6 +1,6 @@
 ---
 name: chanjing-credentials-guard
-description: Run this skill before any chanjing-related action. When the user asks to generate or configure chanjing credentials/keys (AK/SK), run this skill to guide them—check if already configured; if yes, ask whether to re-apply; then open login page and show config commands. ALWAYS run when user asks for chanjing credentials/keys or before any chanjing API (voice list, TTS, avatar, voice-clone).
+description: Run this skill before any chanjing-related action. When the user asks to generate or configure chanjing credentials/keys (AK/SK), run this skill to guide them—check if already configured; if yes, ask whether to re-apply; then open login page and let the user either run the config command or paste AK/SK for the agent to apply. ALWAYS run when user asks for chanjing credentials/keys or before any chanjing API (voice list, TTS, avatar, voice-clone).
 ---
 
 # Chanjing Credentials Guard
@@ -16,7 +16,7 @@ Before calling any Chanjing API (list voices, TTS, avatar, voice clone, etc.), c
 
 ```
 1. Check if local AK/SK exists
-   └─ No  → Run open_login_page (open login in browser) → Show user the command to set AK/SK → Stop (user must re-run their original action after setting)
+   └─ No  → Run open_login_page (open login in browser) → Offer two setup options (user runs command, or pastes AK/SK for the agent to apply) → After config, continue the original action without asking the user to re-run it
    └─ Yes → Continue
 
 2. Check if local Token exists and is not expired
@@ -48,8 +48,15 @@ AK/SK and Token are read from the **same config file**. Path and format follow t
 When local `app_id` or `secret_key` is missing:
 
 1. **Open login page**: Run the `open_login_page` script to open the Chanjing sign-in page in the default browser (`https://www.chanjing.cc/openapi/login`).
-2. **Show set AK/SK command**: Output the command for the user to run after obtaining keys.
-3. **After setting**: Tell the user to **re-run their previous action** (or the current command) so credentials are validated again.
+2. **Offer two setup options** after the user obtains keys:
+   - Option A: show the command for the user to run locally.
+   - Option B: let the user paste `AK=... SK=...` in chat and apply it for them by running `python skills/chanjing-credentials-guard/scripts/chanjing-config --ak ... --sk ...`.
+3. **Continue automatically after setting**: Once AK/SK is saved successfully, continue the original skill flow in the same conversation. Do not ask the user to re-run their previous action.
+4. **Handle secrets carefully**:
+   - Tell the user AK/SK is sensitive and chat history may retain it.
+   - If the user chooses chat-based setup, do not echo the full values back.
+   - Only confirm with masked output such as `AK=abcd****`, `SK=wxyz****`.
+   - Do not print the full secret in summaries or follow-up messages.
 
 Commands to set AK/SK (use either):
 
@@ -82,13 +89,21 @@ Check if local AK/SK already exists (read `~/.chanjing/credentials.json` for non
 2. **Explain the page flow clearly**:
    - New users are registered automatically and the current page will display `App ID` and `Secret Key` with copy buttons.
    - Existing users may be redirected to the console; tell them to open the left-side **API 密钥** page to view or reset keys.
-3. **Output the set AK/SK command** and tell the user to run it in the terminal after obtaining `app_id` and `secret_key`:
+3. **Offer two ways to configure AK/SK** after the user obtains `app_id` and `secret_key`:
    ```bash
    python skills/chanjing-credentials-guard/scripts/chanjing-config --ak <your_app_id> --sk <your_secret_key>
    ```
-4. **After setting**: Config is saved and Chanjing skills can be used; if this was triggered by another action, the user can re-run that action. For re-apply, the command above overwrites the existing config.
+   The user may either:
+   - run the command themselves, or
+   - paste `AK=<your_app_id> SK=<your_secret_key>` in chat so the agent can run the command for them.
+4. **When the user pastes AK/SK in chat**:
+   - treat the values as sensitive,
+   - run the config command on the user's machine,
+   - avoid echoing full secrets back,
+   - continue the original task after successful config instead of stopping.
+5. **After setting**: Config is saved and Chanjing skills can be used immediately. If this flow was triggered by another action, continue that action automatically. For re-apply, the command above overwrites the existing config.
 
-You can run `python skills/chanjing-credentials-guard/scripts/open_login_page` first to open the login page, then paste the config command in the conversation.
+You can run `python skills/chanjing-credentials-guard/scripts/open_login_page` first to open the login page, then either run the config command yourself or paste `AK=... SK=...` in the conversation for the agent to apply.
 
 ## Token API (see chanjing-openapi.yaml)
 
@@ -139,7 +154,7 @@ Response (success `code: 0`):
 # Open login page (also runs automatically when AK/SK is missing)
 python skills/chanjing-credentials-guard/scripts/open_login_page
 
-# Set AK/SK (after setting, user should re-run their previous action)
+# Set AK/SK manually
 python skills/chanjing-credentials-guard/scripts/chanjing-config --ak <app_id> --sk <secret_key>
 
 # View status

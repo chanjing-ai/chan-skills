@@ -4,6 +4,7 @@
 
 本 skill 当前覆盖这些接口：
 
+* `GET /open/v1/list_common_dp`
 * `POST /open/v1/list_customised_person`
 * `POST /open/v1/create_video`
 * `GET /open/v1/video`
@@ -12,7 +13,7 @@
 
 ## Figure List Notes
 
-接口：
+### 定制数字人接口
 
 ```http
 POST /open/v1/list_customised_person
@@ -32,6 +33,30 @@ POST /open/v1/list_customised_person
 * `audio_man_id`
 * `support_4k`
 * `preview_url`
+
+### 公共数字人接口
+
+```http
+GET /open/v1/list_common_dp?page=<page>&size=<size>
+```
+
+典型用途：
+
+* 获取公共数字人 `person.id`
+* 获取该人物可用的 `figures[].type`
+* 获取默认可复用的 `audio_man_id`
+* 获取 `figures[].preview_video_url` 便于人工选择形象
+
+脚本默认关注这些字段：
+
+* `id`
+* `name`
+* `figures[].type`
+* `figures[].width`
+* `figures[].height`
+* `audio_man_id`
+* `audio_name`
+* `figures[].preview_video_url`
 
 ## Create Task Notes
 
@@ -96,8 +121,8 @@ POST /open/v1/create_video
 
 ### Common request fields
 
-* `person.id`: 形象 id，来自 `list_customised_person`
-* `person.figure_type`: 公共数字人形态，如 `whole_body` / `sit_body`
+* `person.id`: 形象 id，来自 `list_common_dp` 或 `list_customised_person`
+* `person.figure_type`: 公共数字人形态，如 `whole_body` / `sit_body` / `circle_view`；使用公共数字人时必传
 * `audio.type`: `tts` 或 `audio`
 * `audio.tts.text`: 文本数组，建议把所有文本放进一个字符串
 * `audio.tts.audio_man`: 声音 id，优先使用该形象返回的 `audio_man_id`
@@ -118,6 +143,7 @@ POST /open/v1/create_video
 * 文本长度应小于 4000 字符
 * 音频驱动目前适合 wav / mp3 / m4a；如需字幕，建议上传 8000 Hz 或 16000 Hz 单声道音频
 * 背景图仅支持 `jpg` / `png`
+* 使用公共数字人时，先从 `figures[]` 中选定具体 `type`，再把对应的宽高映射到 `person.width` / `person.height`
 * 开启 `resolution_rate=1` 时，最好先确认数字人 `support_4k=true`
 * 下载不应由创建或轮询脚本自动触发
 
@@ -174,7 +200,7 @@ GET /open/v1/video?id=<video_id>
 
 | 脚本 | 对应接口 |
 |------|----------|
-| `list_figures` | `POST /open/v1/list_customised_person` |
+| `list_figures` | `GET /open/v1/list_common_dp` 或 `POST /open/v1/list_customised_person` |
 | `upload_file` | `GET /open/v1/common/create_upload_url` + `PUT sign_url` + `GET /open/v1/common/file_detail` |
 | `create_task` | `POST /open/v1/create_video` |
 | `poll_task` | `GET /open/v1/video` |

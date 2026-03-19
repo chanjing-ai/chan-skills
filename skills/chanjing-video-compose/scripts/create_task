@@ -2,7 +2,9 @@
 """
 创建蝉镜视频合成任务。
 用法:
-  文本驱动:
+  公共数字人文本驱动:
+    create_task --person-id <id> --figure-type sit_body --text "台词" --audio-man <声音id>
+  定制数字人文本驱动:
     create_task --person-id <id> --text "台词" --audio-man <声音id>
   音频驱动:
     create_task --person-id <id> --audio-file-id <file_id>
