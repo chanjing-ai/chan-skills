@@ -151,7 +151,7 @@ POST /open/v1/create_video
 脚本约定：
 
 * `create_task --subtitle show` 会传 `subtitle_config.show=true`
-* 若未额外传字幕位置和样式参数，`create_task --subtitle show` 会自动补齐官方推荐默认值：1080p 为 `31/1521/1000/200/64/7/0`，4K 画布为 `80/2840/2000/1000/150/7/0`
+* 若未额外传字幕位置和样式参数，`create_task --subtitle show` 会自动补齐官方推荐默认值（含白字 `color=#FFFFFF`）：1080p 为 `31/1521/1000/200/64/#FFFFFF/7/0`，4K 画布为 `80/2840/2000/1000/150/#FFFFFF/7/0`
 * `create_task --subtitle hide` 会传 `subtitle_config.show=false`
 * `create_task --hide-subtitle` 兼容旧用法，也会传 `subtitle_config.show=false`
 * `create_task` 支持通过 `--subtitle-x` / `--subtitle-y` / `--subtitle-width` / `--subtitle-height` / `--subtitle-font-size` / `--subtitle-color` / `--subtitle-stroke-color` / `--subtitle-stroke-width` / `--subtitle-font-id` / `--subtitle-asr-type` 覆盖默认字幕配置中的任意字段

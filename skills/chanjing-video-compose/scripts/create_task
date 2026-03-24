@@ -41,6 +41,7 @@ def get_default_subtitle_fields(args):
             "width": 2000,
             "height": 1000,
             "font_size": 150,
+            "color": "#FFFFFF",
             "stroke_width": 7,
             "asr_type": 0,
         }
@@ -50,6 +51,7 @@ def get_default_subtitle_fields(args):
         "width": 1000,
         "height": 200,
         "font_size": 64,
+        "color": "#FFFFFF",
         "stroke_width": 7,
         "asr_type": 0,
     }

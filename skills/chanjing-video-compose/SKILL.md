@@ -32,8 +32,8 @@ description: Use Chanjing video synthesis APIs to create digital human videos fr
 ## Standard Workflow
 
 1. 先让用户明确选择数字人来源：`common`（公共数字人）或 `customised`（定制数字人）
-2. 调用 `list_figures --source <common|customised>` 获取可用形象；选定 `person.id`
-3. 如果选择公共数字人，还要再确认 `figure_type`，例如 `sit_body` / `whole_body` / `circle_view`
+2. 调用 `list_figures --source <common|customised>`（建议 `--json`，公共源可加大 `--page-size` 或翻页）获取可用形象；**在候选内对比** `name`、各 `figure` 的 `type` 与分辨率、`audio_man_id`、`audio_name`（若有）与任务人设后再选定 `person.id`。**禁止**未比较就默认列表最前几项。
+3. 如果选择公共数字人，还要再确认 `figure_type`（与所选 `figures[].type` 一致），例如 `sit_body` / `whole_body` / `circle_view`。无用户特殊要求时，**默认优先年轻、有活力的形象**（名称/`audio_name` 偏青年、学生、元气等）；题材需要成熟或中老年气质时再改选。
 4. 若使用文本驱动，确定 `audio_man_id`
 5. 在创建任务前，必须明确询问用户字幕偏好：`show`（保留字幕）或 `hide`（隐藏字幕）
 6. 如果用户选择 `show` 但没有提出自定义样式或位置需求，直接使用官方文档推荐默认值；只有在用户明确想调整字幕位置或样式时，才继续追问 `subtitle_config` 参数
@@ -142,8 +142,9 @@ python skills/chanjing-video-compose/scripts/download_result \
 
 * 不要默认假设用户要字幕或不要字幕
 * 创建任务前，必须先明确询问用户选择：`show` 或 `hide`
+* 若由 **`chanjing-one-click-video`** 的 **`run_render.py`** 调用 `create_task`，以当次 **`workflow.json` 根级 `subtitle_required`** 为准（**默认 false** → `--subtitle hide`；**true** → `show` 及推荐样式），**无需**为该一键成片路径再单独追问字幕开关，除非用户在需求里明确要求改字幕策略
 * 用户选择保留字幕时，调用 `create_task --subtitle show`
-* 若用户未指定字幕位置或样式，直接使用官方推荐默认值：1080p 为 `x=31 y=1521 width=1000 height=200 font_size=64 stroke_width=7 asr_type=0`；4K 画布为 `x=80 y=2840 width=2000 height=1000 font_size=150 stroke_width=7 asr_type=0`
+* 若用户未指定字幕位置或样式，直接使用官方推荐默认值；`create_task` 在未传 `--subtitle-color` 时默认白字 `color=#FFFFFF`：1080p 为 `x=31 y=1521 width=1000 height=200 font_size=64 stroke_width=7 asr_type=0`；4K 画布为 `x=80 y=2840 width=2000 height=1000 font_size=150 stroke_width=7 asr_type=0`（两组均含 `color=#FFFFFF`）
 * 用户选择隐藏字幕时，调用 `create_task --subtitle hide` 或兼容旧用法 `--hide-subtitle`
 * 若用户要求调整字幕位置或样式，可继续传 `--subtitle-x` / `--subtitle-y` / `--subtitle-width` / `--subtitle-height` / `--subtitle-font-size` / `--subtitle-color` / `--subtitle-stroke-color` / `--subtitle-stroke-width` / `--subtitle-font-id` / `--subtitle-asr-type`
 * 坐标基于左上角原点；字幕区域不能超出 `screen_width` / `screen_height`
