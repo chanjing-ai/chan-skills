@@ -150,11 +150,11 @@ POST /open/v1/create_video
 
 脚本约定：
 
-* `create_task --subtitle show` 会传 `subtitle_config.show=true`
-* 若未额外传字幕位置和样式参数，`create_task --subtitle show` 会自动补齐官方推荐默认值（含白字 `color=#FFFFFF`）：1080p 为 `31/1521/1000/200/64/#FFFFFF/7/0`，4K 画布为 `80/2840/2000/1000/150/#FFFFFF/7/0`
-* `create_task --subtitle hide` 会传 `subtitle_config.show=false`
-* `create_task --hide-subtitle` 兼容旧用法，也会传 `subtitle_config.show=false`
-* `create_task` 支持通过 `--subtitle-x` / `--subtitle-y` / `--subtitle-width` / `--subtitle-height` / `--subtitle-font-size` / `--subtitle-color` / `--subtitle-stroke-color` / `--subtitle-stroke-width` / `--subtitle-font-id` / `--subtitle-asr-type` 覆盖默认字幕配置中的任意字段
+* `create_task.py --subtitle show` 会传 `subtitle_config.show=true`
+* 若未额外传字幕位置和样式参数，`create_task.py --subtitle show` 会自动补齐官方推荐默认值（含白字 `color=#FFFFFF`）：1080p 为 `31/1521/1000/200/64/#FFFFFF/7/0`，4K 画布为 `80/2840/2000/1000/150/#FFFFFF/7/0`
+* `create_task.py --subtitle hide` 会传 `subtitle_config.show=false`
+* `create_task.py --hide-subtitle` 兼容旧用法，也会传 `subtitle_config.show=false`
+* `create_task.py` 支持通过 `--subtitle-x` / `--subtitle-y` / `--subtitle-width` / `--subtitle-height` / `--subtitle-font-size` / `--subtitle-color` / `--subtitle-stroke-color` / `--subtitle-stroke-width` / `--subtitle-font-id` / `--subtitle-asr-type` 覆盖默认字幕配置中的任意字段
 * 若用户只确认“显示字幕”而未指定位置，代理应直接使用默认值；若用户要求“字幕更高一点”“靠左一点”等，再结合左上角原点规则追问具体坐标或给出建议值
 
 ### Constraints and caveats
@@ -220,14 +220,14 @@ GET /open/v1/video?id=<video_id>
 
 | 脚本 | 对应接口 |
 |------|----------|
-| `list_figures` | `GET /open/v1/list_common_dp` 或 `POST /open/v1/list_customised_person` |
-| `upload_file` | `GET /open/v1/common/create_upload_url` + `PUT sign_url` + `GET /open/v1/common/file_detail` |
-| `create_task` | `POST /open/v1/create_video` |
-| `poll_task` | `GET /open/v1/video` |
-| `download_result` | 下载 `video_url` 到本地 |
+| `list_figures.py` | `GET /open/v1/list_common_dp` 或 `POST /open/v1/list_customised_person` |
+| `upload_file.py` | `GET /open/v1/common/create_upload_url` + `PUT sign_url` + `GET /open/v1/common/file_detail` |
+| `create_task.py` | `POST /open/v1/create_video` |
+| `poll_task.py` | `GET /open/v1/video` |
+| `download_result.py` | 下载 `video_url` 到本地 |
 
 ## Download Rule
 
-* `download_result` 是显式动作，不应在 `poll_task` 成功后自动执行
+* `download_result.py` 是显式动作，不应在 `poll_task.py` 成功后自动执行
 * 优先先把 `video_url` 返回给用户
 * 只有在用户确认下载时，才保存到 `outputs/video-compose/`

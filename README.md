@@ -39,7 +39,7 @@ Before using Chan Jing (蝉镜) skills (TTS, digital avatar, voice clone, etc.),
 
 1. Open the Chan Jing sign-up/login page to obtain AK/SK:
    ```bash
-   python skills/chanjing-credentials-guard/scripts/open_login_page
+   python skills/chanjing-credentials-guard/scripts/open_login_page.py
    ```
    Or open in a browser: <https://www.chanjing.cc/openapi/login>  
 2. After signing up or logging in, create an API key in the console and copy **app_id** and **secret_key**.
@@ -49,7 +49,7 @@ Before using Chan Jing (蝉镜) skills (TTS, digital avatar, voice clone, etc.),
 Run in your terminal (replace `<your_app_id>` and `<your_secret_key>` with your values):
 
 ```bash
-python skills/chanjing-credentials-guard/scripts/chanjing-config --ak <your_app_id> --sk <your_secret_key>
+python skills/chanjing-credentials-guard/scripts/chanjing_config.py --ak <your_app_id> --sk <your_secret_key>
 ```
 
 Credentials are written to `~/.chanjing/credentials.json` (override the directory with env `CHANJING_CONFIG_DIR`). After setting, re-run your intended action.
@@ -57,7 +57,7 @@ Credentials are written to `~/.chanjing/credentials.json` (override the director
 Check current config status:
 
 ```bash
-python skills/chanjing-credentials-guard/scripts/chanjing-config --status
+python skills/chanjing-credentials-guard/scripts/chanjing_config.py --status
 ```
 
 ## Available skills
@@ -71,4 +71,5 @@ python skills/chanjing-credentials-guard/scripts/chanjing-config --status
 | chanjing-video-compose | Digital human video synthesis from text or audio, with task polling and optional local download. |
 | chanjing-customised-person | Create, inspect, poll, and delete customised digital humans from uploaded source videos. |
 | chanjing-text-to-digital-person | Create AI digital person images from prompts, turn them into short talking videos, and optionally run LoRA tasks. |
-| chanjing-ai-creation | Generic AI creation task runner for supported image/video models, with submit, list, detail, polling, and download workflows. |
+| chanjing-ai-creation | Chanjing AI creation Open API client: submit tasks, poll status, list/get tasks, optional download; reads/writes `credentials.json`. |
+| chanjing-one-click-video-creation | One-click short video from a topic or workflow: script, storyboard, TTS, digital-human compose, AI B-roll, and local mux; orchestrates Chanjing APIs and sibling skills in this repo; requires **ffmpeg** and **ffprobe**. |

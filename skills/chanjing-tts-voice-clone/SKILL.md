@@ -1,9 +1,44 @@
 ---
 name: chanjing-tts-voice-clone
-description: Use Chanjing TTS API to synthesize speech from text, using user-provided voice
+description: >-
+  Use Chanjing TTS API to synthesize speech from text with a user-provided
+  cloned voice (reference audio via public URL).
+credential: credentials.json (app_id/secret_key; access_token and expire_in persisted on disk; same file as chanjing-credentials-guard)
+openclaw_primary_env: false
+environment: CHANJING_OPENAPI_CREDENTIALS_DIR, CHANJING_OPENAPI_BASE_URL
+legacy_environment: CHANJING_CONFIG_DIR, CHANJING_API_BASE
+machine_readable: manifest.yaml
+requires_ffmpeg: false
+requires_ffprobe: false
+notes: User supplies a public URL for reference audio; Chanjing servers fetch it.
 ---
 
 # Chanjing TTS Voice Clone
+
+## 功能说明
+
+基于用户提供的**参考音频公网 URL**（由蝉镜服务端拉取）创建音色并合成语音；轮询任务并从接口返回 URL 下载结果。脚本**不**依赖 ffmpeg/ffprobe。凭据、令牌写回与权限见 **`manifest.yaml`**；**`access_token` / `expire_in` 刷新时会覆盖同文件字段**，勿将凭证提交版本库。
+
+## 运行依赖
+
+- **python3** 与同仓库 `scripts/*.py`
+- **无** ffmpeg/ffprobe 门控
+
+## 环境变量与机器可读声明
+
+- 环境变量键名与说明：**`manifest.yaml`**（`environment` 段）及本文
+- 变量、凭据、**`permissions.userContent`**（含参考音公网 URL 由蝉镜拉取）：**`manifest.yaml`**
+
+## 使用命令
+
+- **ClawHub**（slug 以注册表为准）：`clawhub run chanjing-tts-voice-clone`
+- **本仓库**：`python skills/chanjing-tts-voice-clone/scripts/create_voice.py …`（见正文 **How to Use**）
+
+---
+
+## 登记与审稿（单一事实来源）
+
+主凭据、**`expire_in`** 写回与覆盖行为、用户参考音 URL 边界等：**以 `manifest.yaml` 为准**。本篇 **How to Use** 起为 API 步骤与英文接口说明。
 
 ## When to Use This Skill
 
@@ -17,7 +52,11 @@ This TTS service supports:
 
 ## How to Use This Skill
 
-**前置条件（权限验证）**：执行本 Skill 前，必须先通过 **chanjing-credentials-guard** 完成 AK/SK 与 Token 校验。脚本与 guard 使用同一套凭证；无凭证时会执行 `open_login_page` 打开注册/登录页。
+**前置条件（权限验证）**：执行本 Skill 前，必须先通过 **chanjing-credentials-guard** 完成 AK/SK 与 Token 校验。脚本与 guard 使用同一套凭证；无凭证时会执行 `open_login_page.py` 打开注册/登录页。凭据与审稿对表见 **`manifest.yaml`**。
+
+### Security & credentials（引用）
+
+**Purpose / Credentials / user-supplied reference URL / downloads**：见 **`manifest.yaml`** 中 **`credentials`** 与 **`clientPermissions`**（及合规 **`permissions`**）；勿与本节以下 API 文档重复维护表格。
 
 Chanjing-TTS-Voice-Clone provides an asynchronous speech synthesis API.
 Hostname for all APIs is: "https://open-api.chanjing.cc".
@@ -398,27 +437,27 @@ Response field description:
 
 ## Scripts
 
-本 Skill 提供脚本（`skills/chanjing-tts-voice-clone/scripts/`），与 **chanjing-credentials-guard** 使用同一配置文件；无 AK/SK 时会**执行 `open_login_page` 脚本**打开注册/登录页。
+本 Skill 提供脚本（`skills/chanjing-tts-voice-clone/scripts/`），与 **chanjing-credentials-guard** 使用同一配置文件；无 AK/SK 时会**执行 `open_login_page.py` 脚本**打开注册/登录页。
 
 | 脚本 | 说明 |
 |------|------|
-| `create_voice` | 提交定制声音任务（参考音频 URL），输出 voice_id |
-| `poll_voice` | 轮询定制声音直到就绪（status=2），输出 voice_id |
-| `create_task` | 使用定制声音创建 TTS 任务，输出 task_id |
-| `poll_task` | 轮询 TTS 任务直到完成，输出音频下载 URL |
+| `create_voice.py` | 提交定制声音任务（参考音频 URL），输出 voice_id |
+| `poll_voice.py` | 轮询定制声音直到就绪（status=2），输出 voice_id |
+| `create_task.py` | 使用定制声音创建 TTS 任务，输出 task_id |
+| `poll_task.py` | 轮询 TTS 任务直到完成，输出音频下载 URL |
 
 示例（在项目根或 skill 目录下执行）：
 
 ```bash
 # 1. 创建定制声音（参考音频需为公开 URL）
-VOICE_ID=$(python skills/chanjing-tts-voice-clone/scripts/create_voice --name "我的声音" --url "https://example.com/ref.mp3")
+VOICE_ID=$(python skills/chanjing-tts-voice-clone/scripts/create_voice.py --name "我的声音" --url "https://example.com/ref.mp3")
 
 # 2. 轮询直到声音就绪
-python skills/chanjing-tts-voice-clone/scripts/poll_voice --voice-id "$VOICE_ID"
+python skills/chanjing-tts-voice-clone/scripts/poll_voice.py --voice-id "$VOICE_ID"
 
 # 3. 创建 TTS 任务
-TASK_ID=$(python skills/chanjing-tts-voice-clone/scripts/create_task --audio-man "$VOICE_ID" --text "Hello, I am your AI assistant.")
+TASK_ID=$(python skills/chanjing-tts-voice-clone/scripts/create_task.py --audio-man "$VOICE_ID" --text "Hello, I am your AI assistant.")
 
 # 4. 轮询到完成，得到音频下载链接
-python skills/chanjing-tts-voice-clone/scripts/poll_task --task-id "$TASK_ID"
+python skills/chanjing-tts-voice-clone/scripts/poll_task.py --task-id "$TASK_ID"
 ```

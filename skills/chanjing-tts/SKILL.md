@@ -1,9 +1,43 @@
 ---
 name: chanjing-tts
-description: Use Chanjing TTS API to convert text to speech
+description: >-
+  Use Chanjing TTS API to convert text to speech (list voices, create tasks,
+  poll, download from returned URLs).
+credential: credentials.json (app_id/secret_key; access_token persisted on disk)
+openclaw_primary_env: false
+environment: CHANJING_OPENAPI_CREDENTIALS_DIR, CHANJING_OPENAPI_BASE_URL
+legacy_environment: CHANJING_CONFIG_DIR, CHANJING_API_BASE
+machine_readable: manifest.yaml
+requires_ffmpeg: false
+requires_ffprobe: false
 ---
 
 # Chanjing TTS
+
+## 功能说明
+
+调用蝉镜 **TTS** Open API：列举音色、创建合成任务、轮询并从接口返回 URL 下载音频。脚本**不**依赖 ffmpeg/ffprobe。
+
+## 运行依赖
+
+- **python3** 与同仓库 `scripts/*.py`
+- **无** ffmpeg/ffprobe 门控
+
+## 环境变量与机器可读声明
+
+- 环境变量键名与说明：**`manifest.yaml`**（`environment` 段）及本文
+- 变量、凭据、合规 **`permissions`**、**`clientPermissions`、`agentPolicy`**：**`manifest.yaml`**
+
+## 使用命令
+
+- **ClawHub**（slug 以注册表为准）：`clawhub run chanjing-tts`
+- **本仓库**：`python skills/chanjing-tts/scripts/create_task.py …`（见正文 **How to Use**）
+
+---
+
+## 登记与审稿（单一事实来源）
+
+主凭据、下载行为、**`primaryEnv` 省略**等：**以 `manifest.yaml` 为准**。本篇 **How to Use** 起为 API 步骤说明。
 
 ## When to Use This Skill
 
@@ -18,7 +52,11 @@ Chanjing TTS supports:
 
 ## How to Use This Skill
 
-**前置条件（权限验证）**：执行本 Skill 前，必须先通过 **chanjing-credentials-guard** 完成 AK/SK 与 Token 校验。本 Skill 与 guard 使用同一套凭证（`~/.chanjing/credentials.json`）；脚本在无凭证时会**执行 `open_login_page` 脚本**，在默认浏览器打开 AK/SK 注册/登录页，并提示配置命令。
+**前置条件（权限验证）**：执行本 Skill 前，必须先通过 **chanjing-credentials-guard** 完成 AK/SK 与 Token 校验。本 Skill 与 guard 使用同一套凭证（`~/.chanjing/credentials.json`）；脚本在无凭证时会**执行 `open_login_page.py` 脚本**，在默认浏览器打开 AK/SK 注册/登录页，并提示配置命令。凭据与审稿对表见 **`manifest.yaml`**。
+
+### Security & credentials（引用）
+
+详见 **`manifest.yaml`** 中 **`credentials`** 与 **`clientPermissions`**（及合规顶层 **`permissions`**）。
 
 Multiple APIs need to be invoked. All share the domain: "https://open-api.chanjing.cc".
 All requests communicate using json.
@@ -373,25 +411,25 @@ Response status code description:
 
 ## Scripts
 
-本 Skill 提供脚本（`skills/chanjing-tts/scripts/`），**带权限验证**：与 **chanjing-credentials-guard** 使用同一配置文件；无 AK/SK 时会**执行 guard 的 `open_login_page` 脚本**，在浏览器打开注册/登录页，并提示配置命令。
+本 Skill 提供脚本（`skills/chanjing-tts/scripts/`），**带权限验证**：与 **chanjing-credentials-guard** 使用同一配置文件；无 AK/SK 时会**执行 guard 的 `open_login_page.py` 脚本**，在浏览器打开注册/登录页，并提示配置命令。
 
 | 脚本 | 说明 |
 |------|------|
-| `list_voices` | 列出公共声音人，默认输出 id/name 表，可选 `--json` 输出完整数据 |
-| `create_task` | 创建 TTS 任务，输出 task_id |
-| `poll_task` | 轮询任务直到完成，输出音频下载 URL（full.url） |
+| `list_voices.py` | 列出公共声音人，默认输出 id/name 表，可选 `--json` 输出完整数据 |
+| `create_task.py` | 创建 TTS 任务，输出 task_id |
+| `poll_task.py` | 轮询任务直到完成，输出音频下载 URL（full.url） |
 
 示例（在项目根或 skill 目录下执行）：
 
 ```bash
 # 1. 列出可用声音，选取一个 id
-python skills/chanjing-tts/scripts/list_voices
+python skills/chanjing-tts/scripts/list_voices.py
 
 # 2. 创建合成任务
-TASK_ID=$(python skills/chanjing-tts/scripts/create_task \
+TASK_ID=$(python skills/chanjing-tts/scripts/create_task.py \
   --audio-man "f9248f3b1b42447fb9282829321cfcf2" \
   --text "Hello, I am your AI assistant.")
 
 # 3. 轮询到完成，得到音频下载链接
-python skills/chanjing-tts/scripts/poll_task --task-id "$TASK_ID"
+python skills/chanjing-tts/scripts/poll_task.py --task-id "$TASK_ID"
 ```

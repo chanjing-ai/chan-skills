@@ -37,7 +37,7 @@
 
 ## Credential storage format
 
-AK/SK are read from a config file. Path and format follow **`scripts/chanjing-config`** (see `CONFIG_DIR`, `CONFIG_FILE`, and `read_config()` in that script).
+AK/SK are read from a config file. Path and format follow **`scripts/chanjing_config.py`** (see `CONFIG_DIR`, `CONFIG_FILE`, and `read_config()` in that script).
 
 File path: `~/.chanjing/credentials.json` (default; override with env `CHANJING_CONFIG_DIR`)
 

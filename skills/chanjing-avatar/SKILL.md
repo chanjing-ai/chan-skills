@@ -1,9 +1,43 @@
 ---
 name: chanjing-avatar
-description: Use Chanjing Avatar API for lip-syncing video generation
+description: >-
+  Use Chanjing Avatar API for lip-syncing video generation (upload audio/video,
+  create tasks, poll results).
+credential: credentials.json (app_id/secret_key; access_token persisted on disk)
+openclaw_primary_env: false
+environment: CHANJING_OPENAPI_CREDENTIALS_DIR, CHANJING_OPENAPI_BASE_URL
+legacy_environment: CHANJING_CONFIG_DIR, CHANJING_API_BASE
+machine_readable: manifest.yaml
+requires_ffmpeg: false
+requires_ffprobe: false
 ---
 
 # Chanjing Avatar (Lip-Syncing)
+
+## 功能说明
+
+调用蝉镜 **Avatar** Open API：上传音视频素材、创建对口型任务、轮询与获取结果链接。脚本为 Python HTTP/上传客户端，**不**依赖 ffmpeg/ffprobe。
+
+## 运行依赖
+
+- **python3** 与同仓库 `scripts/*.py`
+- **无** ffmpeg/ffprobe 门控
+
+## 环境变量与机器可读声明
+
+- 环境变量键名与说明：**`manifest.yaml`**（`environment` 段）及本文
+- 变量、凭据、合规 **`permissions`**、**`clientPermissions`、`agentPolicy`**：**`manifest.yaml`**
+
+## 使用命令
+
+- **ClawHub**（slug 以注册表为准）：`clawhub run chanjing-avatar`
+- **本仓库**：`python skills/chanjing-avatar/scripts/create_task.py …`（流程见正文 **How to Use**）
+
+---
+
+## 登记与审稿（单一事实来源）
+
+主凭据、上传/下载边界、浏览器引导等：**以 `manifest.yaml` 为准**。本篇 **How to Use** 起为 API 步骤说明。
 
 ## When to Use This Skill
 
@@ -18,7 +52,11 @@ Chanjing Avatar supports:
 
 ## How to Use This Skill
 
-**前置条件**：执行本 Skill 前，必须先通过 **chanjing-credentials-guard** 完成 AK/SK 与 Token 校验。
+**前置条件**：执行本 Skill 前，必须先通过 **chanjing-credentials-guard** 完成 AK/SK 与 Token 校验。凭据与审稿对表见 **`manifest.yaml`**。
+
+### Security & credentials（引用）
+
+详见 **`manifest.yaml`** 中 **`credentials`** 与 **`clientPermissions`**（含本地上传、结果 URL、浏览器行为；合规见顶层 **`permissions`**）。
 
 Multiple APIs need to be invoked. All share the domain: "https://open-api.chanjing.cc".
 All requests communicate using json.
@@ -341,28 +379,28 @@ When a callback URL is provided, the system will send a POST request when the ta
 
 | 脚本 | 说明 |
 |------|------|
-| `get_upload_url` | 获取上传链接，输出 `sign_url`、`mime_type`、`file_id` |
-| `upload_file` | 上传本地文件，轮询 file_detail 直到就绪后输出 `file_id` |
-| `create_task` | 创建对口型任务（TTS 或音频驱动），输出视频任务 id |
-| `poll_task` | 轮询任务直到完成，输出 `video_url` |
+| `get_upload_url.py` | 获取上传链接，输出 `sign_url`、`mime_type`、`file_id` |
+| `upload_file.py` | 上传本地文件，轮询 file_detail 直到就绪后输出 `file_id` |
+| `create_task.py` | 创建对口型任务（TTS 或音频驱动），输出视频任务 id |
+| `poll_task.py` | 轮询任务直到完成，输出 `video_url` |
 
 示例（在项目根或 skill 目录下执行）：
 
 ```bash
 # 1. 上传驱动视频，得到 video_file_id
-VIDEO_FILE_ID=$(python skills/chanjing-avatar/scripts/upload_file --service lip_sync_video --file ./my_video.mp4)
+VIDEO_FILE_ID=$(python skills/chanjing-avatar/scripts/upload_file.py --service lip_sync_video --file ./my_video.mp4)
 
 # 2. 创建 TTS 对口型任务（需先通过 list_common_audio 获取 audio_man_id）
-TASK_ID=$(python skills/chanjing-avatar/scripts/create_task \
+TASK_ID=$(python skills/chanjing-avatar/scripts/create_task.py \
   --video-file-id "$VIDEO_FILE_ID" \
   --text "君不见黄河之水天上来" \
   --audio-man-id "C-f2429d07554749839849497589199916")
 
 # 3. 轮询直到完成，得到视频下载链接
-python skills/chanjing-avatar/scripts/poll_task --id "$TASK_ID"
+python skills/chanjing-avatar/scripts/poll_task.py --id "$TASK_ID"
 ```
 
-音频驱动时：先上传音频得到 `audio_file_id`，再 `create_task --video-file-id <id> --audio-file-id <audio_file_id>`。
+音频驱动时：先上传音频得到 `audio_file_id`，再 `create_task.py --video-file-id <id> --audio-file-id <audio_file_id>`。
 
 ## Response Status Code Description
 

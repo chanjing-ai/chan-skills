@@ -1,0 +1,108 @@
+# 合规：根目录 合规规则.md §1–§2
+# 网络：create_upload_url 返回的 sign_url 常指向独立对象存储域，主机名随蝉镜配置变化，
+# 无法用固定 allowed_hosts 穷举，故 network_mode 为 open（见 clientPermissions.network 说明）。
+name: chanjing-customised-person
+version: 0.1.0
+vendor: chanjing
+runtime:
+  interpreter: python3
+  dependencies: []
+env:
+  required: []
+  optional:
+    - CHANJING_OPENAPI_CREDENTIALS_DIR
+    - CHANJING_OPENAPI_BASE_URL
+    - CHANJING_CONFIG_DIR
+    - CHANJING_API_BASE
+permissions:
+  network_mode: open
+  filesystem:
+    read_roots:
+      - "${WORKSPACE_ROOT}"
+      - "${SKILL_DIR}"
+      - "${CHANJING_OPENAPI_CREDENTIALS_DIR}"
+    write_roots:
+      - "${WORKSPACE_ROOT}"
+      - "${CHANJING_OPENAPI_CREDENTIALS_DIR}"
+  allowed_commands:
+    - python3
+
+schemaVersion: 1
+skill:
+  id: chanjing-customised-person
+  author: chan-skills
+  category: 媒体处理
+  tags:
+    - 定制数字人
+    - 数字人
+    - ChanjingAPI
+    - 蝉镜
+  summary: >-
+    蝉镜定制数字人：get_upload_url（create_upload_url）→ 对返回的 sign_url 执行 PUT 上传本地视频
+    → 创建/列出/获取/轮询/删除定制形象；不引入其它云厂商凭证，仅 Open API 与接口给出的上传端点。
+  skillDoc: SKILL.md
+  siblingSkills:
+    - chanjing-credentials-guard
+
+environment:
+  variables:
+    - name: CHANJING_OPENAPI_CREDENTIALS_DIR
+      required: false
+      description: 存放 credentials.json 的目录（兼容 CHANJING_CONFIG_DIR），默认 ~/.chanjing；可不设。
+    - name: CHANJING_OPENAPI_BASE_URL
+      required: false
+      description: Open API 基址（兼容 CHANJING_API_BASE），默认 https://open-api.chanjing.cc；可不设。
+
+credentials:
+  model: credentials_json
+  defaultPath: "~/.chanjing/credentials.json"
+  directoryEnv: CHANJING_OPENAPI_CREDENTIALS_DIR
+  fileName: credentials.json
+  sensitiveFields:
+    - app_id
+    - secret_key
+    - access_token
+    - expire_in
+  persistAccessTokenOnDisk: true
+  primaryEnvIntentionallyOmitted: true
+  doNotCommitToVcs:
+    - credentials.json
+  persistNote: >-
+    access_token 与 expire_in 刷新后写回 credentials.json 为预期行为；须限制文件权限（如 0600/目录 0700）
+    并确保永不提交版本库。
+
+clientPermissions:
+  network:
+    httpsOutbound: true
+    documentedHosts:
+      - open-api.chanjing.cc
+    signUrlPutNote: >-
+      upload_file.py 在 GET create_upload_url 后，向响应中的 sign_url 发起 HTTPS PUT 上传视频正文；
+      该 URL 的主机通常为蝉镜侧对象存储或 CDN，域名可能不同于 open-api.chanjing.cc，且可能随环境变化，
+      故 permissions.network_mode 使用 open 而非固定主机白名单。
+    userCallbackNote: >-
+      create_person.py 可选 --callback：若提供 URL，远程服务可能将任务结果 POST 到用户指定端点，
+      载荷可能含任务状态与资源引用等敏感信息；须自行信任该端点并承担出站与数据暴露风险。
+  filesystem:
+    read:
+      - "${CHANJING_OPENAPI_CREDENTIALS_DIR or CHANJING_CONFIG_DIR or ~/.chanjing}/credentials.json"
+      - user_provided_video_paths
+    write:
+      - "${CHANJING_OPENAPI_CREDENTIALS_DIR or CHANJING_CONFIG_DIR or ~/.chanjing}/credentials.json"
+  browser:
+    mayOpenForAuth: true
+    documentedHosts:
+      - www.chanjing.cc
+  subprocess:
+    allowedPatterns:
+      - python3
+  userContent:
+    uploadsLocalVideoToApi: true
+
+metadata:
+  openclaw:
+    homepage: https://doc.chanjing.cc
+
+agentPolicy:
+  alwaysSkill: false
+  modifiesOtherSkillsOrGlobalAgent: false

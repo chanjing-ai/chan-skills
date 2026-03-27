@@ -3,7 +3,7 @@ import json
 import urllib.parse
 import urllib.request
 
-API_BASE = __import__("os").environ.get("CHANJING_API_BASE", "https://open-api.chanjing.cc")
+API_BASE = (__import__("os").environ.get("CHANJING_OPENAPI_BASE_URL") or __import__("os").environ.get("CHANJING_API_BASE") or "https://open-api.chanjing.cc").rstrip("/")
 
 PHOTO_RUNNING = {"Ready", "Generating", "Queued"}
 PHOTO_SUCCESS = {"Success"}

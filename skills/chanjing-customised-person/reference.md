@@ -170,10 +170,10 @@ POST /open/v1/delete_customised_person
 
 | 脚本 | 对应接口 |
 |------|----------|
-| `get_upload_url` | `GET /open/v1/common/create_upload_url` |
-| `upload_file` | `GET /open/v1/common/create_upload_url` + `PUT sign_url` + `GET /open/v1/common/file_detail` |
-| `create_person` | `POST /open/v1/create_customised_person` |
-| `list_persons` | `POST /open/v1/list_customised_person` |
-| `get_person` | `GET /open/v1/customised_person` |
-| `poll_person` | `GET /open/v1/customised_person` |
-| `delete_person` | `POST /open/v1/delete_customised_person` |
+| `get_upload_url.py` | `GET /open/v1/common/create_upload_url` |
+| `upload_file.py` | `GET /open/v1/common/create_upload_url` + `PUT sign_url` + `GET /open/v1/common/file_detail` |
+| `create_person.py` | `POST /open/v1/create_customised_person` |
+| `list_persons.py` | `POST /open/v1/list_customised_person` |
+| `get_person.py` | `GET /open/v1/customised_person` |
+| `poll_person.py` | `GET /open/v1/customised_person` |
+| `delete_person.py` | `POST /open/v1/delete_customised_person` |

@@ -71,6 +71,6 @@ flowchart TD
 
 ## 4. 数字人与音色（无环境变量默认）
 
-`run_render.py` **不会**从环境变量读取默认音色、数字人 `person_id` 或 `figure_type`。每次成片须在 **`workflow.json` 根级**写明 **`audio_man`**、存在数字人镜时的 **`person_id`**（或 `avatar_id`）与 **`figure_type`**。请按当次 **`video_plan`** 与口播人设，调用 **`list_voices`** 与 **`list_figures`**（`--source` 与任务一致，如公共或定制），将返回的 ID 填入；勿依赖 shell/`export` 或仓库内跨任务的隐式「默认」记录。
+`run_render.py` **不会**从环境变量读取默认音色、数字人 `person_id` 或 `figure_type`。每次成片须在 **`workflow.json` 根级**写明 **`audio_man`**、存在数字人镜时的 **`person_id`**（或 `avatar_id`）与 **`figure_type`**。请按当次 **`video_plan`** 与口播人设，调用 **`list_voices.py`** 与 **`list_figures.py`**（`--source` 与任务一致，如公共或定制），将返回的 ID 填入；勿依赖 shell/`export` 或仓库内跨任务的隐式「默认」记录。
 
 ---

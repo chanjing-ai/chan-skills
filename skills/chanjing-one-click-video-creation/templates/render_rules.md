@@ -36,12 +36,12 @@
 - 成片默认竖屏 **1080×1920**（以数字人分镜为准）。
 - 子进程可至约 10 分钟级。
 - 多镜并行与 CDN 下载须**限并发**。
-- 仓库自动化：配置 **`CHAN_SKILLS_DIR`**（见 `SKILL.md` §3）。
+- 仓库自动化：配置 **`SKILLS_DIR`** 或 **`CHANJING_ONE_CLICK_VIDEO_SKILLS_ROOT`**（兼容 **`CHAN_SKILLS_DIR`**；见 `SKILL.md` §3）。
 - 远程下载与 ffmpeg 受并发控制；多段拼接；必要时按音频裁视频或末帧 / `tpad` 延长。
 
 ### C.2 封装与编码（对齐数字人轨）
 
-**目标**：AI 等非数字人轨在进入最终 concat 前，与**本任务内**公共数字人 `poll_task` 落盘样例在分辨率、帧率、编码、码率量级上对齐。
+**目标**：AI 等非数字人轨在进入最终 concat 前，与**本任务内**公共数字人 `poll_task.py` 落盘样例在分辨率、帧率、编码、码率量级上对齐。
 
 | 步骤 | 要求 |
 |------|------|
@@ -55,16 +55,16 @@
 ### C.3 数字人（选型与合成）
 
 - 每次拉**最新**列表；不用过期 person id。
-- 请求里须显式提供 `person_id`/`avatar_id` 与 **`figure_type`**（公共多形态时与 `list_figures` 列一致）；**禁止**用环境变量覆盖数字人/形象类型。
-- **`list_figures` 默认 `--source customised`**，空列表正常；**公共形象**须显式执行 `list_figures --source common`（脚本无环境变量改默认源）。
+- 请求里须显式提供 `person_id`/`avatar_id` 与 **`figure_type`**（公共多形态时与 `list_figures.py` 列一致）；**禁止**用环境变量覆盖数字人/形象类型。
+- **`list_figures.py` 默认 `--source customised`**，空列表正常；**公共形象**须显式执行 `list_figures.py --source common`（脚本无环境变量改默认源）。
 - **选型须对比，勿默认列表排序**：`--json` 下对每条公共数字人比对 `name`、`figures[].type`、`figures[].width`/`height`、`audio_man_id`、`audio_name` 与当次策划/口播人设；必要时增大 `--page-size` 或翻页。**禁止**未比较即取返回列表最前几条。**默认偏好年轻形象**（名称或 `audio_name` 体现青年/元气/学生等气质者优先；题材需要成熟/中老年时再调整），与 **`chanjing-one-click-video-creation` `SKILL.md` §3** 一致。
 - TTS **`audio_man`** 宜与该形象返回的 **`audio_man_id`** 一致；**须在 `workflow.json` 中写明**，禁止依赖环境变量默认音色。
 - 失败可在**同套切段音频**下换列表中其它形象重试。
 
 **数字人镜操作**：
 
-- 上传该镜音频 `file_id`，`create_task` **音频驱动**。
-- 数字人镜字幕：**默认** **`--subtitle hide`**；`workflow.json` 根级 **`subtitle_required`: true** 时 **`--subtitle show`**。`show` 且未传 `--subtitle-color` 时默认 **`#FFFFFF`（白字）**，位置与其它样式见 **`chanjing-video-compose`** skill / `create_task`。
+- 上传该镜音频 `file_id`，`create_task.py` **音频驱动**。
+- 数字人镜字幕：**默认** **`--subtitle hide`**；`workflow.json` 根级 **`subtitle_required`: true** 时 **`--subtitle show`**。`show` 且未传 `--subtitle-color` 时默认 **`#FFFFFF`（白字）**，位置与其它样式见 **`chanjing-video-compose`** skill / `create_task.py`。
 - 公共多形态时 **`--figure-type` 与列表一致**。
 
 ### C.4 音频与 TTS
@@ -99,7 +99,7 @@
 ### C.7 收尾与并发
 
 - 各镜顺序拼成成片；成功记本地路径与 `mixed_dh_ai` 类标记。
-- 数字人与 AI **`poll_task` 可并行**。
+- 数字人与 AI **`poll_task.py` 可并行**。
 - CDN 下载限并发（见 **§4 硬性约束** 表 **#7**）。
 
 ---
@@ -110,12 +110,12 @@
 |---|------|
 | 1 | **先定稿再渲染**：plan / 全文 / 分镜确认后再渲染。 |
 | 2 | **TTS**：默认整段一次再按 scene 切；超过约 **4000 字**则分镜连续块**尽量少批**、同参数、**拼一条总音频**；**禁止**无必要按句/按镜碎 TTS。 |
-| 3 | **镜头**：第 1、最后一镜数字人；中间奇数数字人、偶数 AI（规程见 **`storyboard_prompt.md`**「分镜结构与切段」；无自动化时 Agent 自检）。 |
+| 3 | **镜头**：第 1、最后一镜数字人；中间奇数数字人、偶数 AI（规程见 **`storyboard_prompt.md`**「分镜结构与切段」；无自动化时 Agent 自检）。**首镜**：第 1 分镜 `voiceover` **≤20 字（硬上限）**，见同文件「文本切段」**首个分镜约束（硬）**。 |
 | 4 | **人物族裔与造型**：AI 镜出现**可辨识人物**（或英文描述易使模型生成带人种特征的人像）时，须先据口播写清**与叙述一致的可见身份、动作、着装或现场关系**（**`storyboard_prompt.md`·D.1a**），**禁止**无依据的库存人设。族裔处理：**触发条件**、默认 profile、推荐英文短语及禁止项一律以 **`visual_prompt_people_constraint.md`·「显式族裔锚定（硬规则）」** 为准；满足触发条件时**必须在** `ref_prompt` 中**显式写入**族裔锚定，**禁止**仅用无族裔信息的通用人物描述依赖模型默认。口播或用户已能合理推断其他人种/地域时，须自洽。**语境缺省与由叙事推断之国别、朝代、文明圈**须与画面符号一致（无异域穿帮），见 **`storyboard_prompt.md`·D.0**、**`history_storyboard_prompt.md`·「文明圈与国别自洽」**、**`visual_prompt_people_constraint.md`·「历史 / 非当代」**。 |
 | 5 | **AI 提示词**：自动路径按 **非当代/当代** 与口播组装；缺省与文明圈推断见 **`storyboard_prompt.md`·D.0**；**非特定人物题材**见 **`storyboard_prompt.md`·D.1a**。人工覆盖以 `storyboard_prompt.md` 为主；**勿**写死行业长篇样例或抄用他题 `ref_prompt`（示例仅演示结构）。 |
 | 6 | **文生视频负向校验**：`ref_prompt` 须通过 **`storyboard_prompt.md`·D.1b**（负向清单 / 正向替换 / 可选英文否定短句）；命中负向而未改写不得提交。 |
 | 7 | **CDN**：下载限流，防 429。 |
-| 8 | **当次任务**：以**本次**任务 id 轮询为准；**勿**用 `list_tasks` 等历史列表替代当次提交与下载（除非用户明确要求复用历史任务）。 |
+| 8 | **当次任务**：以**本次**任务 id 轮询为准；**勿**用 `list_tasks.py` 等历史列表替代当次提交与下载（除非用户明确要求复用历史任务）。 |
 
 ---
 

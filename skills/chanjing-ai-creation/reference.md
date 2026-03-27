@@ -1,5 +1,7 @@
 # Reference
 
+脚本职责与 **SKILL.md** 一致：`submit_task.py` 提交、`poll_task.py` 轮询、`list_tasks.py` / `get_task.py` 列表与详情、`download_result.py` 仅在显式需要时落盘；鉴权读写本地 `credentials.json` 并访问 Open API。
+
 ## Covered APIs
 
 本 skill 当前覆盖这些接口：
@@ -18,9 +20,10 @@ POST /open/v1/ai_creation/task/submit
 
 不同模型主要差在请求体字段和 `model_code`，因此本 skill 采用：
 
-* 一个通用 `submit_task`
-* 一个通用 `get_task`
-* 一个通用 `poll_task`
+* 一个通用 `submit_task.py`
+* 一个通用 `list_tasks.py`
+* 一个通用 `get_task.py`
+* 一个通用 `poll_task.py`
 
 对常见字段做 CLI 参数映射，对模型私有字段保留 `--body-file` / `--body-json` 透传能力。
 
@@ -144,7 +147,7 @@ POST /open/v1/ai_creation/task/page
 
 默认脚本行为：
 
-* `poll_task` 默认输出第一条结果地址
+* `poll_task.py` 默认输出第一条结果地址
 * 使用 `--all-urls` 时输出完整 `output_url` 数组
 
 ## Common Status Codes
@@ -162,11 +165,11 @@ POST /open/v1/ai_creation/task/page
 
 | 脚本 | 对应接口 |
 |------|----------|
-| `submit_task` | `POST /open/v1/ai_creation/task/submit` |
-| `get_task` | `GET /open/v1/ai_creation/task` |
-| `list_tasks` | `POST /open/v1/ai_creation/task/page` |
-| `poll_task` | `GET /open/v1/ai_creation/task` |
-| `download_result` | 下载 `output_url` 到本地 |
+| `submit_task.py` | `POST /open/v1/ai_creation/task/submit` |
+| `get_task.py` | `GET /open/v1/ai_creation/task` |
+| `list_tasks.py` | `POST /open/v1/ai_creation/task/page` |
+| `poll_task.py` | `GET /open/v1/ai_creation/task` |
+| `download_result.py` | 下载 `output_url` 到本地 |
 
 ## Model Examples Referenced
 

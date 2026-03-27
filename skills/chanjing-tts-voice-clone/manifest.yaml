@@ -1,0 +1,96 @@
+# 合规：根目录 合规规则.md §1–§2
+name: chanjing-tts-voice-clone
+version: 0.1.0
+vendor: chanjing
+runtime:
+  interpreter: python3
+  dependencies: []
+env:
+  required: []
+  optional:
+    - CHANJING_OPENAPI_CREDENTIALS_DIR
+    - CHANJING_OPENAPI_BASE_URL
+permissions:
+  network_mode: allowlist
+  allowed_hosts:
+    - open-api.chanjing.cc
+    - www.chanjing.cc
+  filesystem:
+    read_roots:
+      - "${WORKSPACE_ROOT}"
+      - "${SKILL_DIR}"
+      - "${CHANJING_OPENAPI_CREDENTIALS_DIR}"
+    write_roots:
+      - "${WORKSPACE_ROOT}"
+      - "${CHANJING_OPENAPI_CREDENTIALS_DIR}"
+  allowed_commands:
+    - python3
+
+schemaVersion: 1
+skill:
+  id: chanjing-tts-voice-clone
+  author: chan-skills
+  category: 媒体处理
+  tags:
+    - TTS
+    - 声音克隆
+    - ChanjingAPI
+    - 蝉镜
+  summary: >-
+    参考音频公网 URL 创建音色并 TTS 合成；轮询任务并从接口 URL 下载结果。
+  skillDoc: SKILL.md
+  siblingSkills:
+    - chanjing-credentials-guard
+
+environment:
+  variables:
+    - name: CHANJING_OPENAPI_CREDENTIALS_DIR
+      required: false
+      description: 存放 credentials.json 的目录（兼容 CHANJING_CONFIG_DIR），默认 ~/.chanjing
+    - name: CHANJING_OPENAPI_BASE_URL
+      required: false
+      description: Open API 基址（兼容 CHANJING_API_BASE），默认 https://open-api.chanjing.cc
+
+credentials:
+  model: credentials_json
+  defaultPath: "~/.chanjing/credentials.json"
+  directoryEnv: CHANJING_OPENAPI_CREDENTIALS_DIR
+  fileName: credentials.json
+  sensitiveFields:
+    - app_id
+    - secret_key
+    - access_token
+    - expire_in
+  persistAccessTokenOnDisk: true
+  primaryEnvIntentionallyOmitted: true
+  doNotCommitToVcs:
+    - credentials.json
+
+clientPermissions:
+  network:
+    httpsOutbound: true
+    documentedHosts:
+      - open-api.chanjing.cc
+  filesystem:
+    read:
+      - "${CHANJING_OPENAPI_CREDENTIALS_DIR or CHANJING_CONFIG_DIR or ~/.chanjing}/credentials.json"
+    write:
+      - "${CHANJING_OPENAPI_CREDENTIALS_DIR or CHANJING_CONFIG_DIR or ~/.chanjing}/credentials.json"
+  browser:
+    mayOpenForAuth: true
+    documentedHosts:
+      - www.chanjing.cc
+  subprocess:
+    allowedPatterns:
+      - python3
+  userContent:
+    mayDownloadFromApiResponseUrls: true
+    userSuppliedPublicReferenceAudioUrlFetchedByChanjingServers: true
+
+metadata:
+  openclaw:
+    homepage: https://doc.chanjing.cc
+
+agentPolicy:
+  alwaysSkill: false
+  modifiesOtherSkillsOrGlobalAgent: false

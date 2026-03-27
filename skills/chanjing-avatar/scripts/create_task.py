@@ -1,0 +1,92 @@
+#!/usr/bin/env python3
+"""
+创建对口型视频任务。与 chanjing-credentials-guard 使用同一配置文件获取 Token。
+用法:
+  TTS 驱动: create_task --video-file-id <id> --text "台词" --audio-man-id <声音id> [--width 1080] [--height 1920]
+  音频驱动: create_task --video-file-id <id> --audio-file-id <id> [--width 1080] [--height 1920]
+输出: 视频任务 id（一行）或错误到 stderr
+"""
+import argparse
+import json
+import sys
+import urllib.request
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from _auth import get_token
+
+API_BASE = (__import__("os").environ.get("CHANJING_OPENAPI_BASE_URL") or __import__("os").environ.get("CHANJING_API_BASE") or "https://open-api.chanjing.cc").rstrip("/")
+
+
+def main():
+    parser = argparse.ArgumentParser(description="创建对口型视频任务")
+    parser.add_argument("--video-file-id", required=True, help="视频 file_id（来自 upload_file）")
+    parser.add_argument("--text", help="TTS 文本（audio_type=tts 时必填）")
+    parser.add_argument("--audio-man-id", help="声音 ID（TTS 时必填）")
+    parser.add_argument("--audio-file-id", help="音频 file_id（audio_type=audio 时必填）")
+    parser.add_argument("--width", type=int, default=1080, help="screen_width，默认 1080")
+    parser.add_argument("--height", type=int, default=1920, help="screen_height，默认 1920")
+    parser.add_argument("--callback", help="任务完成回调 URL")
+    parser.add_argument("--model", type=int, default=0, help="0-基础 1-高清，默认 0")
+    parser.add_argument("--speed", type=float, default=1, help="TTS 语速，默认 1")
+    parser.add_argument("--pitch", type=float, default=1, help="TTS 语调，默认 1")
+    args = parser.parse_args()
+
+    if args.audio_file_id:
+        body = {
+            "video_file_id": args.video_file_id,
+            "screen_width": args.width,
+            "screen_height": args.height,
+            "model": args.model,
+            "audio_type": "audio",
+            "audio_file_id": args.audio_file_id,
+        }
+    elif args.text and args.audio_man_id:
+        body = {
+            "video_file_id": args.video_file_id,
+            "screen_width": args.width,
+            "screen_height": args.height,
+            "model": args.model,
+            "audio_type": "tts",
+            "tts_config": {
+                "text": [args.text],
+                "audio_man_id": args.audio_man_id,
+                "speed": args.speed,
+                "pitch": args.pitch,
+            },
+        }
+    else:
+        print("请指定 --text + --audio-man-id（TTS）或 --audio-file-id（音频驱动）", file=sys.stderr)
+        sys.exit(1)
+
+    if args.callback:
+        body["callback"] = args.callback
+
+    token, err = get_token()
+    if err:
+        print(err, file=sys.stderr)
+        sys.exit(1)
+
+    url = f"{API_BASE}/open/v1/video_lip_sync/create"
+    req = urllib.request.Request(
+        url,
+        data=json.dumps(body).encode("utf-8"),
+        headers={"access_token": token, "Content-Type": "application/json"},
+        method="POST",
+    )
+    with urllib.request.urlopen(req, timeout=30) as resp:
+        res = json.loads(resp.read().decode("utf-8"))
+
+    if res.get("code") != 0:
+        print(res.get("msg", res), file=sys.stderr)
+        sys.exit(1)
+
+    video_id = res.get("data")
+    if not video_id:
+        print("响应无 data", file=sys.stderr)
+        sys.exit(1)
+    print(video_id)
+
+
+if __name__ == "__main__":
+    main()

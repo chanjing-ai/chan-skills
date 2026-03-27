@@ -1,5 +1,5 @@
 # 鉴权：与 chanjing-credentials-guard 使用同一配置文件（CONFIG_DIR/credentials.json）
-# 无 AK/SK 时执行 open_login_page 脚本打开注册/登录页
+# 无 AK/SK 时执行 open_login_page.py 打开注册/登录页
 import json
 import os
 import subprocess
@@ -8,23 +8,39 @@ import time
 import urllib.request
 from pathlib import Path
 
-CONFIG_DIR = Path(os.environ.get("CHANJING_CONFIG_DIR", Path.home() / ".chanjing"))
+_DEFAULT_OPENAPI_BASE = "https://open-api.chanjing.cc"
+
+
+def credentials_config_dir() -> Path:
+    raw = os.environ.get("CHANJING_OPENAPI_CREDENTIALS_DIR") or os.environ.get("CHANJING_CONFIG_DIR")
+    return Path(raw).expanduser() if raw else Path.home() / ".chanjing"
+
+
+def openapi_base_url() -> str:
+    return (
+        os.environ.get("CHANJING_OPENAPI_BASE_URL")
+        or os.environ.get("CHANJING_API_BASE")
+        or _DEFAULT_OPENAPI_BASE
+    ).rstrip("/")
+
+
+CONFIG_DIR = credentials_config_dir()
 CONFIG_FILE = CONFIG_DIR / "credentials.json"
-API_BASE = os.environ.get("CHANJING_API_BASE", "https://open-api.chanjing.cc")
+API_BASE = openapi_base_url()
 BUFFER_SECONDS = 300
 LOGIN_URL = "https://www.chanjing.cc/openapi/login"
 
 NO_CREDENTIALS_MSG = """已在浏览器打开蝉镜登录/注册页。
 获取秘钥后请执行：
-  python skills/chanjing-credentials-guard/scripts/chanjing-config --ak <你的app_id> --sk <你的secret_key>
+  python skills/chanjing-credentials-guard/scripts/chanjing_config.py --ak <你的app_id> --sk <你的secret_key>
 设置完毕后请重新执行您之前的操作。"""
 
 
 def _run_open_login_page():
-    """执行 credentials-guard 的 open_login_page 脚本，在默认浏览器打开注册/登录页。"""
+    """执行 credentials-guard 的 open_login_page.py，在默认浏览器打开注册/登录页。"""
     try:
         skills_dir = Path(__file__).resolve().parent.parent.parent
-        script = skills_dir / "chanjing-credentials-guard" / "scripts" / "open_login_page"
+        script = skills_dir / "chanjing-credentials-guard" / "scripts" / "open_login_page.py"
         if script.exists():
             subprocess.run([sys.executable, str(script)], check=False, timeout=5)
         else:

@@ -1,5 +1,7 @@
 # `chanjing-ai-creation` 速用版
 
+底层是 Open API 脚本：**提交 →（列表/查询）→ 轮询**；仅在你明确要求时才**下载**到本地；需 **credentials.json**。完整说明见仓库 **`skills/chanjing-ai-creation/SKILL.md`**。
+
 ## 什么时候用
 
 - 想做海报、封面、创意图、创意视频

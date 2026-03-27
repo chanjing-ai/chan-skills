@@ -91,7 +91,7 @@ GET /open/v1/aigc/photo/task?unique_id=<task_id>
 GET /open/v1/aigc/photo/task/page?page=1&page_size=10
 ```
 
-虽然接口名称是“文生图任务列表”，但返回里 `type=2` 也可表示 motion 任务，因此本 skill 用 `list_tasks` 统一展示。
+虽然接口名称是“文生图任务列表”，但返回里 `type=2` 也可表示 motion 任务，因此本 skill 用 `list_tasks.py` 统一展示。
 
 重点字段：
 
@@ -123,7 +123,7 @@ POST /open/v1/aigc/motion
 
 ### Notes
 
-* `photo_path` 需要是可访问的图片 URL，通常来自 `poll_photo_task`
+* `photo_path` 需要是可访问的图片 URL，通常来自 `poll_photo_task.py`
 * RPM 10/min，任务并发 1
 
 ## Get Motion Task
@@ -206,14 +206,14 @@ GET /open/v1/aigc/lora/task?lora_id=<lora_id>
 
 | 脚本 | 对应接口 |
 |------|----------|
-| `create_photo_task` | `POST /open/v1/aigc/photo` |
-| `get_photo_task` | `GET /open/v1/aigc/photo/task` |
-| `list_tasks` | `GET /open/v1/aigc/photo/task/page` |
-| `poll_photo_task` | `GET /open/v1/aigc/photo/task` |
-| `create_motion_task` | `POST /open/v1/aigc/motion` |
-| `get_motion_task` | `GET /open/v1/aigc/motion/task` |
-| `poll_motion_task` | `GET /open/v1/aigc/motion/task` |
-| `create_lora_task` | `POST /open/v1/aigc/lora/task/create` |
-| `get_lora_task` | `GET /open/v1/aigc/lora/task` |
-| `poll_lora_task` | `GET /open/v1/aigc/lora/task` |
-| `download_result` | 下载 `output_url` 到本地 |
+| `create_photo_task.py` | `POST /open/v1/aigc/photo` |
+| `get_photo_task.py` | `GET /open/v1/aigc/photo/task` |
+| `list_tasks.py` | `GET /open/v1/aigc/photo/task/page` |
+| `poll_photo_task.py` | `GET /open/v1/aigc/photo/task` |
+| `create_motion_task.py` | `POST /open/v1/aigc/motion` |
+| `get_motion_task.py` | `GET /open/v1/aigc/motion/task` |
+| `poll_motion_task.py` | `GET /open/v1/aigc/motion/task` |
+| `create_lora_task.py` | `POST /open/v1/aigc/lora/task/create` |
+| `get_lora_task.py` | `GET /open/v1/aigc/lora/task` |
+| `poll_lora_task.py` | `GET /open/v1/aigc/lora/task` |
+| `download_result.py` | 下载 `output_url` 到本地 |
