@@ -61,4 +61,4 @@ ENV/
 env.bak/
 venv.bak/
 scripts/*
-chanjing-openapi.yaml
+chanjing-openapi.yamloutputs/

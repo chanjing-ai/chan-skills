@@ -200,7 +200,7 @@ notes: >-
 | `subtitle_required` | 否 | 默认 false；为 true 时数字人镜烧录字幕（`--subtitle show`） |
 | `speed`/`pitch` | 否 | 默认 1/1 |
 | `ai_video_duration_sec` | 否 | 5 或 10，默认 10 |
-| `model_code` | 否 | 默认 **`CHANJING_ONE_CLICK_VIDEO_CREATION_MODEL_CODE`**（兼容 **`AI_VIDEO_MODEL`**）或 `Doubao-Seedance-1.0-pro`；creation_type=4；不传 `ref_img_url` |
+| `model_code` | 否 | 默认 **`CHANJING_ONE_CLICK_VIDEO_CREATION_MODEL_CODE`**（兼容 **`AI_VIDEO_MODEL`**）或 `minmax-h3-t2v`；creation_type=4；不传 `ref_img_url` |
 | `max_retry_per_step` | 否 | 默认 1（§6） |
 
 ```bash
