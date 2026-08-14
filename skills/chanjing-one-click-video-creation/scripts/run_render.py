@@ -850,7 +850,7 @@ def main() -> None:
     model_code = (
         data.get("model_code")
         or one_click_ai_creation_model_code()
-        or "Doubao-Seedance-1.0-pro"
+        or "minmax-h3-t2v"
     )
 
     dh_subtitle = "show" if data.get("subtitle_required") else "hide"

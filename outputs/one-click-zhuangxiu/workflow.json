@@ -1,0 +1,31 @@
+{
+  "topic": "装修房子先定预算和动线，少踩返工坑",
+  "full_script": "装修房子，别一上来就挑颜色。先把三件事定清楚：预算上限、家庭动线、收纳习惯。水电和柜体最容易返工，图纸阶段就要把插座、灯位、家电尺寸核一遍。风格可以慢慢选，基础做对，入住才真的舒服。",
+  "audio_man": "C-CASE-38f44fdd1928442e9932fe38e67c5f2b",
+  "person_id": "4fb93b8a099c496c90da45cbad37b32f",
+  "figure_type": "whole_body",
+  "subtitle_required": false,
+  "ai_video_duration_sec": 5,
+  "max_retry_per_step": 1,
+  "scenes": [
+    {
+      "scene_id": 1,
+      "voiceover": "装修房子，别一上来就挑颜色。",
+      "use_avatar": true,
+      "subtitle": "装修房子，别一上来就挑颜色。"
+    },
+    {
+      "scene_id": 2,
+      "voiceover": "先把三件事定清楚：预算上限、家庭动线、收纳习惯。水电和柜体最容易返工，图纸阶段就要把插座、灯位、家电尺寸核一遍。",
+      "use_avatar": false,
+      "ref_prompt": "Contemporary realistic home renovation documentary B-roll, vertical 9:16. A bright unfurnished apartment under renovation, Asian young homeowner and interior designer checking floor plan, measuring wall and cabinet dimensions, electrician marking socket positions, samples of wood flooring, tiles, cabinet boards and warm lighting on a work table. Clean practical atmosphere, natural daylight, medium and wide shots, stable handheld camera, realistic construction details, no readable text, no logos, no UI, no unsafe behavior.",
+      "subtitle": "先把三件事定清楚：预算上限、家庭动线、收纳习惯。水电和柜体最容易返工，图纸阶段就要把插座、灯位、家电尺寸核一遍。"
+    },
+    {
+      "scene_id": 3,
+      "voiceover": "风格可以慢慢选，基础做对，入住才真的舒服。",
+      "use_avatar": true,
+      "subtitle": "风格可以慢慢选，基础做对，入住才真的舒服。"
+    }
+  ]
+}

@@ -5,7 +5,7 @@
   "person_id": "每次任务据语义与 video_plan：list_figures 所选来源行的 person_id",
   "figure_type": "与当次 list_figures 该形象行的 figure_type 一致（以接口返回为准）",
   "ai_video_duration_sec": 10,
-  "model_code": "Doubao-Seedance-1.0-pro",
+  "model_code": "minmax-h3-t2v",
   "max_retry_per_step": 1,
   "scenes": [
     {

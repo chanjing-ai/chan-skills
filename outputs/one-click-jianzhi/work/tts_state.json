@@ -1,0 +1,181 @@
+{
+  "task_ids": [
+    "b3a8e09b744a44c293e664bc4533f1d7"
+  ],
+  "subtitles": [
+    {
+      "start_time": 0.0,
+      "end_time": 2.04,
+      "subtitle": "别再把减脂想成挨饿"
+    },
+    {
+      "start_time": 2.04,
+      "end_time": 4.48,
+      "subtitle": "真正能坚持的是三件小事"
+    },
+    {
+      "start_time": 4.48,
+      "end_time": 7.24,
+      "subtitle": "每顿先吃够蛋白质和蔬菜"
+    },
+    {
+      "start_time": 7.24,
+      "end_time": 8.88,
+      "subtitle": "主食留一拳头"
+    },
+    {
+      "start_time": 8.88,
+      "end_time": 10.64,
+      "subtitle": "每天走八千步"
+    },
+    {
+      "start_time": 10.64,
+      "end_time": 12.92,
+      "subtitle": "力量训练每周两三次"
+    },
+    {
+      "start_time": 12.92,
+      "end_time": 14.28,
+      "subtitle": "晚上少熬夜"
+    },
+    {
+      "start_time": 14.28,
+      "end_time": 16.56,
+      "subtitle": "体重看七天平均"
+    },
+    {
+      "start_time": 16.56,
+      "end_time": 18.08,
+      "subtitle": "慢一点没关系"
+    },
+    {
+      "start_time": 18.08,
+      "end_time": 19.84,
+      "subtitle": "能坚持才会变轻"
+    }
+  ],
+  "batches_audio_task_state": [
+    {
+      "id": "b3a8e09b744a44c293e664bc4533f1d7",
+      "type": "tts",
+      "status": 9,
+      "text": [
+        "别再把减脂想成挨饿。真正能坚持的是三件小事：每顿先吃够蛋白质和蔬菜，主食留一拳头；每天走八千步，力量训练每周两三次；晚上少熬夜，体重看七天平均。慢一点没关系，能坚持才会变轻。"
+      ],
+      "full": {
+        "url": "https://res.chanjing.cc/chanjing/res/upload/tts/2026-08-14/35869b1878f5286d1367b88bd879c337.wav",
+        "watermark_url": "https://res.chanjing.cc/chanjing/watermark/audio/2026-08-14/6cc6ba5af5579497f6ea1c7f1aad1ed1.mp3",
+        "path": "6cc6ba5af5579497f6ea1c7f1aad1ed1.mp3",
+        "duration": 20.08
+      },
+      "slice": null,
+      "errMsg": "",
+      "errReason": "",
+      "subtitles": [
+        {
+          "key": "34b3d810585f61a1c4d06747d00ec696cf7fbefe",
+          "start_time": 0,
+          "end_time": 2.04,
+          "subtitle": "别再把减脂想成挨饿",
+          "keywords": null,
+          "words": null,
+          "alt_subtitle": "",
+          "subtitle_tag": ""
+        },
+        {
+          "key": "b660caa1a8e9c1ab205b351e4ee58389c952c398",
+          "start_time": 2.04,
+          "end_time": 4.48,
+          "subtitle": "真正能坚持的是三件小事",
+          "keywords": null,
+          "words": null,
+          "alt_subtitle": "",
+          "subtitle_tag": ""
+        },
+        {
+          "key": "e43617f619a3de975f935019f93700c40c085eb0",
+          "start_time": 4.48,
+          "end_time": 7.24,
+          "subtitle": "每顿先吃够蛋白质和蔬菜",
+          "keywords": null,
+          "words": null,
+          "alt_subtitle": "",
+          "subtitle_tag": ""
+        },
+        {
+          "key": "a57f3ca6d6f85c1d0dcc67caed6f076c035e323c",
+          "start_time": 7.24,
+          "end_time": 8.88,
+          "subtitle": "主食留一拳头",
+          "keywords": null,
+          "words": null,
+          "alt_subtitle": "",
+          "subtitle_tag": ""
+        },
+        {
+          "key": "36d92102f0e4e4f2db11e81fd09c3c18962329ca",
+          "start_time": 8.88,
+          "end_time": 10.64,
+          "subtitle": "每天走八千步",
+          "keywords": null,
+          "words": null,
+          "alt_subtitle": "",
+          "subtitle_tag": ""
+        },
+        {
+          "key": "3ecb1e16ebd65ed9e533e103fa547b5524463e28",
+          "start_time": 10.64,
+          "end_time": 12.92,
+          "subtitle": "力量训练每周两三次",
+          "keywords": null,
+          "words": null,
+          "alt_subtitle": "",
+          "subtitle_tag": ""
+        },
+        {
+          "key": "31289bbd66098b793c8f8feb8c84432432a22eaf",
+          "start_time": 12.92,
+          "end_time": 14.28,
+          "subtitle": "晚上少熬夜",
+          "keywords": null,
+          "words": null,
+          "alt_subtitle": "",
+          "subtitle_tag": ""
+        },
+        {
+          "key": "dcee9a1eee167ef602aad01ef26d619bf4d9eb0a",
+          "start_time": 14.28,
+          "end_time": 16.56,
+          "subtitle": "体重看七天平均",
+          "keywords": null,
+          "words": null,
+          "alt_subtitle": "",
+          "subtitle_tag": ""
+        },
+        {
+          "key": "0743e877254137d5bc72d43a9f522b6568cdf51a",
+          "start_time": 16.56,
+          "end_time": 18.08,
+          "subtitle": "慢一点没关系",
+          "keywords": null,
+          "words": null,
+          "alt_subtitle": "",
+          "subtitle_tag": ""
+        },
+        {
+          "key": "63a3dc21f86b0f0d932a68e7047c6ee24b669514",
+          "start_time": 18.08,
+          "end_time": 19.84,
+          "subtitle": "能坚持才会变轻",
+          "keywords": null,
+          "words": null,
+          "alt_subtitle": "",
+          "subtitle_tag": ""
+        }
+      ],
+      "focus_titles": null,
+      "key": "",
+      "plain_text": ""
+    }
+  ]
+}

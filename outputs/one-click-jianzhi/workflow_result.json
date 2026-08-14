@@ -1,0 +1,40 @@
+{
+  "status": "success",
+  "align_quality": "low_prop",
+  "render_result": {
+    "video_file": "/datadisk1/xieshiji/code/chan-skills/outputs/one-click-jianzhi/final_one_click.mp4",
+    "scene_video_urls": {
+      "dh_1": "https://res.chanjing.cc/chanjing/prod/dhaio/output/2026-08-14/2088143000936419328-1786687080-output.mp4",
+      "dh_3": "https://res.chanjing.cc/chanjing/prod/dhaio/output/2026-08-14/2088143186422083584-1786687121-output.mp4",
+      "ai_2_0": "https://res.chanjing.cc/chanjing/ai_creation/open/video/178/2026-08-14/6c36a08c3db135b2ffc1d8679f9edef2.mp4",
+      "ai_2_1": "https://res.chanjing.cc/chanjing/ai_creation/open/video/178/2026-08-14/08d3a18dae59bf7fc98a7a2d63aef0fb.mp4",
+      "ai_2_2": "https://res.chanjing.cc/chanjing/ai_creation/open/video/178/2026-08-14/314af8bec7d12ceb180970a5577cc936.mp4"
+    }
+  },
+  "debug": {
+    "tts_task_ids": [
+      "b3a8e09b744a44c293e664bc4533f1d7"
+    ],
+    "dh_video_ids": {
+      "1": "2088143000936419328",
+      "3": "2088143186422083584"
+    },
+    "ai_unique_ids": {
+      "2_0": "9189f392-5725-4b23-aeb5-1d2ac125e5ae",
+      "2_1": "93888b6f-108f-4726-8b04-bf5b03c0918a",
+      "2_2": "83d1f90a-fe3d-461e-96be-6e8e35d4b603"
+    },
+    "intermediate_paths": {
+      "tts_merged_mp3": "/datadisk1/xieshiji/code/chan-skills/outputs/one-click-jianzhi/work/tts_merged.mp3",
+      "tts_state_json": "/datadisk1/xieshiji/code/chan-skills/outputs/one-click-jianzhi/work/tts_state.json",
+      "scene_times_json": "/datadisk1/xieshiji/code/chan-skills/outputs/one-click-jianzhi/work/scene_times.json",
+      "final_concat_list": "/datadisk1/xieshiji/code/chan-skills/outputs/one-click-jianzhi/work/final_concat.txt"
+    },
+    "ai_video_submit_params": {
+      "aspect_ratio": "9:16",
+      "clarity": 1080,
+      "ref_width": 1080,
+      "ref_height": 1920
+    }
+  }
+}

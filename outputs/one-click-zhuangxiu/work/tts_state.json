@@ -1,0 +1,181 @@
+{
+  "task_ids": [
+    "a1dd5bdc4bea4e0a9051de37275c63df"
+  ],
+  "subtitles": [
+    {
+      "start_time": 0.0,
+      "end_time": 0.76,
+      "subtitle": "装修房子"
+    },
+    {
+      "start_time": 0.76,
+      "end_time": 2.6,
+      "subtitle": "别一上来就挑颜色"
+    },
+    {
+      "start_time": 2.6,
+      "end_time": 4.52,
+      "subtitle": "先把三件事定清楚"
+    },
+    {
+      "start_time": 4.52,
+      "end_time": 7.52,
+      "subtitle": "预算上限、家庭动线、收纳习惯"
+    },
+    {
+      "start_time": 7.52,
+      "end_time": 9.92,
+      "subtitle": "水电和柜体最容易返工"
+    },
+    {
+      "start_time": 9.92,
+      "end_time": 11.92,
+      "subtitle": "图纸阶段就要把插座"
+    },
+    {
+      "start_time": 11.92,
+      "end_time": 14.52,
+      "subtitle": "灯位、家电尺寸核一遍"
+    },
+    {
+      "start_time": 14.52,
+      "end_time": 16.44,
+      "subtitle": "风格可以慢慢选"
+    },
+    {
+      "start_time": 16.44,
+      "end_time": 17.48,
+      "subtitle": "基础做对"
+    },
+    {
+      "start_time": 17.48,
+      "end_time": 19.28,
+      "subtitle": "入住才真的舒服"
+    }
+  ],
+  "batches_audio_task_state": [
+    {
+      "id": "a1dd5bdc4bea4e0a9051de37275c63df",
+      "type": "tts",
+      "status": 9,
+      "text": [
+        "装修房子，别一上来就挑颜色。先把三件事定清楚：预算上限、家庭动线、收纳习惯。水电和柜体最容易返工，图纸阶段就要把插座、灯位、家电尺寸核一遍。风格可以慢慢选，基础做对，入住才真的舒服。"
+      ],
+      "full": {
+        "url": "https://res.chanjing.cc/chanjing/res/upload/tts/2026-08-14/e84ecce9f25969561572166cc7ebfb6e.wav",
+        "watermark_url": "https://res.chanjing.cc/chanjing/watermark/audio/2026-08-14/ddf1de7d1ff4d17d74dafc81120fee43.mp3",
+        "path": "ddf1de7d1ff4d17d74dafc81120fee43.mp3",
+        "duration": 19.52
+      },
+      "slice": null,
+      "errMsg": "",
+      "errReason": "",
+      "subtitles": [
+        {
+          "key": "8c5bbc179548f66a4137a3b346627b2d981adb91",
+          "start_time": 0,
+          "end_time": 0.76,
+          "subtitle": "装修房子",
+          "keywords": null,
+          "words": null,
+          "alt_subtitle": "",
+          "subtitle_tag": ""
+        },
+        {
+          "key": "b78d5aa2c9edfc6058cfa4c64aa07f294f70da3f",
+          "start_time": 0.76,
+          "end_time": 2.6,
+          "subtitle": "别一上来就挑颜色",
+          "keywords": null,
+          "words": null,
+          "alt_subtitle": "",
+          "subtitle_tag": ""
+        },
+        {
+          "key": "6189750c5ca6aa22897d77ae31b85b4546fae77d",
+          "start_time": 2.6,
+          "end_time": 4.52,
+          "subtitle": "先把三件事定清楚",
+          "keywords": null,
+          "words": null,
+          "alt_subtitle": "",
+          "subtitle_tag": ""
+        },
+        {
+          "key": "4fa421d0290d9a2a8305e6c1fda6019ca871dc63",
+          "start_time": 4.52,
+          "end_time": 7.52,
+          "subtitle": "预算上限、家庭动线、收纳习惯",
+          "keywords": null,
+          "words": null,
+          "alt_subtitle": "",
+          "subtitle_tag": ""
+        },
+        {
+          "key": "cb9d6c9cf7504fec0ee353ab190c53eb71f5ffc6",
+          "start_time": 7.52,
+          "end_time": 9.92,
+          "subtitle": "水电和柜体最容易返工",
+          "keywords": null,
+          "words": null,
+          "alt_subtitle": "",
+          "subtitle_tag": ""
+        },
+        {
+          "key": "25585603f46fa829176c176ac16f71c6069a19a1",
+          "start_time": 9.92,
+          "end_time": 11.92,
+          "subtitle": "图纸阶段就要把插座",
+          "keywords": null,
+          "words": null,
+          "alt_subtitle": "",
+          "subtitle_tag": ""
+        },
+        {
+          "key": "0848f9d8f53593827d64254f5f034bd55833f10b",
+          "start_time": 11.92,
+          "end_time": 14.52,
+          "subtitle": "灯位、家电尺寸核一遍",
+          "keywords": null,
+          "words": null,
+          "alt_subtitle": "",
+          "subtitle_tag": ""
+        },
+        {
+          "key": "9bf1650b495fc92e88416ae2471a6d738aa89b54",
+          "start_time": 14.52,
+          "end_time": 16.44,
+          "subtitle": "风格可以慢慢选",
+          "keywords": null,
+          "words": null,
+          "alt_subtitle": "",
+          "subtitle_tag": ""
+        },
+        {
+          "key": "916812c1ce29ddc19f8bf71f837810fb34b6e869",
+          "start_time": 16.44,
+          "end_time": 17.48,
+          "subtitle": "基础做对",
+          "keywords": null,
+          "words": null,
+          "alt_subtitle": "",
+          "subtitle_tag": ""
+        },
+        {
+          "key": "fd11b6a7b9de60e793097a91c165c5ed27f79aff",
+          "start_time": 17.48,
+          "end_time": 19.28,
+          "subtitle": "入住才真的舒服",
+          "keywords": null,
+          "words": null,
+          "alt_subtitle": "",
+          "subtitle_tag": ""
+        }
+      ],
+      "focus_titles": null,
+      "key": "",
+      "plain_text": ""
+    }
+  ]
+}

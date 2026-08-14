@@ -1,0 +1,3 @@
+file '/datadisk1/xieshiji/code/chan-skills/outputs/one-click-jianzhi/work/scene02_ai_p0_norm.mp4'
+file '/datadisk1/xieshiji/code/chan-skills/outputs/one-click-jianzhi/work/scene02_ai_p1_norm.mp4'
+file '/datadisk1/xieshiji/code/chan-skills/outputs/one-click-jianzhi/work/scene02_ai_p2_norm.mp4'
