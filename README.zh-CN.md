@@ -72,4 +72,6 @@ python skills/chanjing-credentials-guard/scripts/chanjing_config.py --status
 | chanjing-customised-person | 基于上传源视频创建、查看、轮询和删除定制数字人。 |
 | chanjing-text-to-digital-person | 通过提示词创建 AI 数字人形象，将其转成短口播视频，并可选执行 LoRA 任务。 |
 | chanjing-ai-creation | 蝉镜 AI 创作 Open API 客户端：提交任务、轮询状态、列表/查询任务、可选下载；读写本地 credentials.json。 |
+| chanjing-video-translation | 创建视频翻译任务并查询支持的目标语言。 |
+| chanjing-openapi-tools | 查询标签、消耗、价格和文件详情，管理分片上传，并生成创意 Briefing。 |
 | chanjing-one-click-video-creation | 选题或工作流一键短视频成片：文案、分镜、TTS、数字人合成、AI 画面与本地封装；编排蝉镜 Open API 与同仓库子技能；需 **ffmpeg** / **ffprobe**。 |

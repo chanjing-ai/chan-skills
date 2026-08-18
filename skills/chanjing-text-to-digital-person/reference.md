@@ -9,8 +9,10 @@
 * `GET /open/v1/aigc/photo/task/page`
 * `POST /open/v1/aigc/motion`
 * `GET /open/v1/aigc/motion/task`
+* `GET /open/v1/aigc/motion/task/page`
 * `POST /open/v1/aigc/lora/task/create`
 * `GET /open/v1/aigc/lora/task`
+* `GET /open/v1/aigc/lora/task/page`
 
 ## Workflow Notes
 
