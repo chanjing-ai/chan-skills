@@ -67,6 +67,12 @@ class TestRunRenderStub(unittest.TestCase):
         self.assertEqual(r["width"], 1080)
         self.assertEqual(r["height"], 1920)
 
+    def test_h264_args_use_software_encoder(self):
+        self.assertEqual(
+            rr.h264_args(),
+            ["-c:v", "libx264", "-crf", "23", "-preset", "medium"],
+        )
+
     def test_display_size_from_stream_rotate_90(self):
         w, h = rr.display_size_from_stream(
             {"width": 1920, "height": 1080, "tags": {"rotate": "90"}}

@@ -4,7 +4,7 @@
 
 推荐两种方式：
 1. 通用参数模式：
-   submit_task --creation-type 3 --model-code doubao-seedream-3.0-t2i --prompt "..." --number-of-images 1
+   submit_task --creation-type 3 --model-code doubao-seedream-4.5 --prompt "..." --number-of-images 1
 2. 原始 JSON 模式：
    submit_task --body-file ./payload.json
    submit_task --body-json '{"creation_type":3,...}'

@@ -72,4 +72,6 @@ python skills/chanjing-credentials-guard/scripts/chanjing_config.py --status
 | chanjing-customised-person | Create, inspect, poll, and delete customised digital humans from uploaded source videos. |
 | chanjing-text-to-digital-person | Create AI digital person images from prompts, turn them into short talking videos, and optionally run LoRA tasks. |
 | chanjing-ai-creation | Chanjing AI creation Open API client: submit tasks, poll status, list/get tasks, optional download; reads/writes `credentials.json`. |
+| chanjing-video-translation | Create video translation tasks and list supported target languages. |
+| chanjing-openapi-tools | Query labels, consumption, prices and file details; manage multipart uploads; generate creative Briefings. |
 | chanjing-one-click-video-creation | One-click short video from a topic or workflow: script, storyboard, TTS, digital-human compose, AI B-roll, and local mux; orchestrates Chanjing APIs and sibling skills in this repo; requires **ffmpeg** and **ffprobe**. |

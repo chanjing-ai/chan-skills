@@ -91,8 +91,10 @@ notes: May invoke chanjing-credentials-guard open_login_page.py when AK/SK missi
 * `GET /open/v1/aigc/photo/task/page`
 * `POST /open/v1/aigc/motion`
 * `GET /open/v1/aigc/motion/task`
+* `GET /open/v1/aigc/motion/task/page`
 * `POST /open/v1/aigc/lora/task/create`
 * `GET /open/v1/aigc/lora/task`
+* `GET /open/v1/aigc/lora/task/page`
 
 ## Scripts
 
@@ -110,6 +112,7 @@ notes: May invoke chanjing-credentials-guard open_login_page.py when AK/SK missi
 | `_task_api.py` | 任务 API 共用逻辑（由各 CLI import） |
 | `create_photo_task.py` | 创建文生图任务 → `photo_unique_id` |
 | `get_photo_task.py` | 单个文生图任务详情 |
+| `list_tasks.py` | 按 `--kind=photo|motion|lora` 分页列出任务 |
 | `list_tasks.py` | 任务列表（`type=1` photo，`type=2` motion） |
 | `poll_photo_task.py` | 轮询文生图至完成 → 默认首张图 URL |
 | `create_motion_task.py` | 创建图生视频 → `motion_unique_id` |

@@ -29,11 +29,13 @@
 
 - 文字变声音：`chanjing-tts`
 - 声音像某个人：`chanjing-tts-voice-clone`
-- 文本驱动唇形 / 语音驱动唇形 / 对口型 / 修改口型 / 视频翻译：`chanjing-avatar`
+- 文本驱动唇形 / 语音驱动唇形 / 对口型 / 修改口型：`chanjing-avatar`
+- 视频翻译：`chanjing-video-translation`
 - 标准数字人口播：`chanjing-video-compose`
 - 训练长期复用数字人：`chanjing-customised-person`
 - 从人设生成数字人形象/视频：`chanjing-text-to-digital-person`
 - 做海报、创意图、创意视频：`chanjing-ai-creation`
+- 查询消耗、价格、标签、文件详情或管理分片上传：`chanjing-openapi-tools`
 - 先把蝉镜账号搞定：`chanjing-credentials-guard`
 
 
