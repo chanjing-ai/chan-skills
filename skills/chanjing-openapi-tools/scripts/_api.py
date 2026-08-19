@@ -14,7 +14,8 @@ def request(token, method, path, payload=None, query=None):
     if payload is not None:
         headers["Content-Type"] = "application/json"
     req = urllib.request.Request(API_BASE + path + suffix, data=data, headers=headers, method=method)
-    with urllib.request.urlopen(req, timeout=30) as response:
+    timeout = 120 if path == "/open/v1/creative/creative_briefing" else 30
+    with urllib.request.urlopen(req, timeout=timeout) as response:
         body = json.loads(response.read().decode("utf-8"))
     if body.get("code") != 0:
         raise RuntimeError(body.get("msg", body))

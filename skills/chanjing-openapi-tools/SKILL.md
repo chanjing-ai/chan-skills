@@ -11,7 +11,7 @@ description: 查询蝉镜标签、消耗、价格，管理分片上传或生成�
 
 ## Covered APIs
 
-* `GET /open/v1/common/tag_list`
+* `GET /open/v1/tag_list`
 * `POST /open/v1/consume_detail`
 * `GET /open/v1/price/catalog`
 * `POST /open/v1/common/create_multipart_upload`

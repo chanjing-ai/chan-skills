@@ -42,7 +42,7 @@ def build_parser():
 def invoke(args, token):
     if args.command == "tag-list":
         query = {"business_type": args.business_type} if args.business_type else None
-        return api_get(token, "/open/v1/common/tag_list", query)
+        return api_get(token, "/open/v1/tag_list", query)
     if args.command == "price-catalog":
         query = {"item_code": args.item_code} if args.item_code else None
         return api_get(token, "/open/v1/price/catalog", query)

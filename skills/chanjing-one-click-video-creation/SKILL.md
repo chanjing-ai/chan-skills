@@ -193,7 +193,7 @@ notes: >-
 | 字段 | 必填 | 说明 |
 |------|------|------|
 | `full_script` | 是 | 与各镜 `voiceover` 按 `scene_id` 拼，`norm` 一致 |
-| `scenes` | 是 | `scene_id`、`voiceover`、`use_avatar`；AI 镜 `ref_prompt`（**`storyboard_prompt.md`** / **`history_storyboard_prompt.md`**；§4.2）；可选 `subtitle` |
+| `scenes` | 是 | `scene_id`（整数或纯数字字符串，按数值升序）、`voiceover`、`use_avatar`；AI 镜 `ref_prompt`（**`storyboard_prompt.md`** / **`history_storyboard_prompt.md`**；§4.2）；可选 `subtitle` |
 | `audio_man` | 是 | 宜与所选数字人形象的 `audio_man_id` 一致 |
 | `person_id`/`avatar_id` | 条件 | 有 DH 镜必填 |
 | `figure_type` | 否 | 与当次 `list_figures.py` 所选形象行的 `figure_type` 一致（公共多形态时必填） |
@@ -259,4 +259,3 @@ python scripts/run_render.py --input workflow.json --output-dir ./outputs/run1
 - 成片时长=TTS 总轨；可与 `duration_sec` 不符  
 - **TTS**：整轨优先、超长少批合并；单批上限与合并策略（含 `TTS_BATCH_MAX`）以 **`render_rules.md` §3·C.4** 为准  
 - 文生失败可能为平台/模型；试增 `max_retry_per_step`、短 `ref_prompt`、拆镜；查 `workflow_result.json`  
-

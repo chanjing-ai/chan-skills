@@ -52,7 +52,7 @@ POST /open/v1/ai_creation/task/submit
 
 ### Typical image model example
 
-以 `doubao-seedream-3.0-t2i` 为例：
+以 `doubao-seedream-4.5` 为例：
 
 ```json
 {
@@ -61,13 +61,13 @@ POST /open/v1/ai_creation/task/submit
   "aspect_ratio": "16:9",
   "clarity": 2048,
   "number_of_images": 1,
-  "model_code": "doubao-seedream-3.0-t2i"
+  "model_code": "doubao-seedream-4.5"
 }
 ```
 
 注意：
 
-* Seedream 3.0 不支持 `ref_img_url`
+* Seedream 4.5 的实际可用清晰度为 2048 或 4096；提交前应按模型返回的参数限制设置。
 
 ### Typical video model example
 
@@ -175,7 +175,7 @@ POST /open/v1/ai_creation/task/page
 
 本 skill 参考了这些模型页来整理通用字段：
 
-* `doubao-seedream-3.0-t2i`
+* `doubao-seedream-4.5`
 * `kling-v2-1`
 * `tx_kling-v2-1-master`
 * `Doubao-Seedance-1.0-pro`

@@ -13,6 +13,12 @@ SPEC.loader.exec_module(OPENAPI_TOOLS)
 
 
 class OpenAPIToolsTest(unittest.TestCase):
+    def test_tag_list_query(self):
+        args = argparse.Namespace(command="tag-list", business_type=[1, 2])
+        with patch.object(OPENAPI_TOOLS, "api_get", return_value={"ok": True}) as api_get:
+            self.assertEqual(OPENAPI_TOOLS.invoke(args, "token"), {"ok": True})
+        api_get.assert_called_once_with("token", "/open/v1/tag_list", {"business_type": [1, 2]})
+
     def test_consume_detail_payload(self):
         args = argparse.Namespace(
             command="consume-detail",

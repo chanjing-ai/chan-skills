@@ -116,12 +116,12 @@ AI 创作的主接口是统一提交器：
 
 ## Usage Examples
 
-示例 1：Seedream 3.0 文生图
+示例 1：Seedream 4.5 文生图
 
 ```bash
 TASK_ID=$(python3 skills/chanjing-ai-creation/scripts/submit_task.py \
   --creation-type 3 \
-  --model-code "doubao-seedream-3.0-t2i" \
+  --model-code "doubao-seedream-4.5" \
   --prompt "赛博朋克城市夜景，霓虹灯，雨夜，电影镜头" \
   --aspect-ratio "16:9" \
   --clarity 2048 \

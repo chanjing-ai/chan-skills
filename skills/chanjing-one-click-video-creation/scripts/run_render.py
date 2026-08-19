@@ -534,8 +534,6 @@ def ffmpeg_cut_audio(src: Path, t0: float, t1: float, out_wav: Path) -> None:
 
 
 def h264_args() -> list[str]:
-    if sys.platform == "darwin":
-        return ["-c:v", "h264_videotoolbox", "-b:v", "8M"]
     return ["-c:v", "libx264", "-crf", "23", "-preset", "medium"]
 
 
