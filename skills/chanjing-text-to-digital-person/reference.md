@@ -10,9 +10,6 @@
 * `POST /open/v1/aigc/motion`
 * `GET /open/v1/aigc/motion/task`
 * `GET /open/v1/aigc/motion/task/page`
-* `POST /open/v1/aigc/lora/task/create`
-* `GET /open/v1/aigc/lora/task`
-* `GET /open/v1/aigc/lora/task/page`
 
 ## Workflow Notes
 
@@ -22,12 +19,6 @@
 2. 再通过 `POST /open/v1/aigc/motion` 把人物图转成会说话的视频
 
 两段都是异步任务，必须轮询详情接口直到成功。
-
-LoRA 是可选增强流程：
-
-1. `POST /open/v1/aigc/lora/task/create`
-2. `GET /open/v1/aigc/lora/task`
-3. 成功后拿到 `photo_task_ids`，再去查 photo 任务结果
 
 ## Create Photo Task
 
@@ -150,49 +141,6 @@ GET /open/v1/aigc/motion/task?unique_id=<task_id>
 * `Success`: 成功，取 `output_url[0]`
 * `Error` / `Fail`: 失败，停止并报错
 
-## Create LoRA Task
-
-接口：
-
-```http
-POST /open/v1/aigc/lora/task/create
-```
-
-### Required fields
-
-* `name`: LoRA 名称
-* `photos`: 训练照片 URL 数组，至少 5 张，最多 50 张
-
-### Optional fields
-
-* `lora_id`: 重试失败任务时传入已有任务 ID
-
-### Notes
-
-* 当前开放接口默认返回 1 张 LoRA 图
-* 这个接口也不接受本地上传，只接受远端图片 URL
-
-## Get LoRA Task
-
-接口：
-
-```http
-GET /open/v1/aigc/lora/task?lora_id=<lora_id>
-```
-
-重点返回字段：
-
-* `lora_id`
-* `photo_task_ids`: 关联生成的照片任务 ID 数组
-* `status`: `Queued / Published / Generating / Success / Fail`
-* `err_msg`
-
-### Poll termination rules
-
-* `Queued` / `Published` / `Generating`: 继续轮询
-* `Success`: 成功，转入 `photo_task_ids`
-* `Fail`: 失败，停止并报错
-
 ## Status Codes
 
 这些接口文档里常见状态码一致：
@@ -215,7 +163,4 @@ GET /open/v1/aigc/lora/task?lora_id=<lora_id>
 | `create_motion_task.py` | `POST /open/v1/aigc/motion` |
 | `get_motion_task.py` | `GET /open/v1/aigc/motion/task` |
 | `poll_motion_task.py` | `GET /open/v1/aigc/motion/task` |
-| `create_lora_task.py` | `POST /open/v1/aigc/lora/task/create` |
-| `get_lora_task.py` | `GET /open/v1/aigc/lora/task` |
-| `poll_lora_task.py` | `GET /open/v1/aigc/lora/task` |
 | `download_result.py` | 下载 `output_url` 到本地 |
