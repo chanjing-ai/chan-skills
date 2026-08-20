@@ -9,7 +9,6 @@
 * “把这张文生图转成会说话的视频”
 * “帮我查一下文生数字人任务状态”
 * “把生成好的图片或视频下载到本地”
-* “帮我跑一个 LoRA 训练任务”
 
 ## Minimal CLI Flows
 
@@ -44,22 +43,7 @@ python3 skills/chanjing-text-to-digital-person/scripts/poll_motion_task.py \
 python3 skills/chanjing-text-to-digital-person/scripts/list_tasks.py
 ```
 
-### 3. LoRA 训练
-
-```bash
-LORA_ID=$(python3 skills/chanjing-text-to-digital-person/scripts/create_lora_task.py \
-  --name "演示LoRA" \
-  --photo-url https://example.com/1.jpg \
-  --photo-url https://example.com/2.jpg \
-  --photo-url https://example.com/3.jpg \
-  --photo-url https://example.com/4.jpg \
-  --photo-url https://example.com/5.jpg)
-
-python3 skills/chanjing-text-to-digital-person/scripts/poll_lora_task.py \
-  --lora-id "$LORA_ID"
-```
-
-### 4. 显式下载
+### 3. 显式下载
 
 ```bash
 python3 skills/chanjing-text-to-digital-person/scripts/download_result.py \
@@ -72,6 +56,4 @@ python3 skills/chanjing-text-to-digital-person/scripts/download_result.py \
 * `poll_photo_task.py` 默认输出第一张图片地址
 * `create_motion_task.py` 输出 `motion_unique_id`
 * `poll_motion_task.py` 默认输出视频地址
-* `create_lora_task.py` 输出 `lora_id`
-* `poll_lora_task.py` 默认输出第一条 `photo_task_id`
 * `download_result.py` 输出本地文件路径
