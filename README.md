@@ -70,7 +70,7 @@ python skills/chanjing-credentials-guard/scripts/chanjing_config.py --status
 | chanjing-avatar | Lip-sync / digital avatar video generation. |
 | chanjing-video-compose | Digital human video synthesis from text or audio, with task polling and optional local download. |
 | chanjing-customised-person | Create, inspect, poll, and delete customised digital humans from uploaded source videos. |
-| chanjing-text-to-digital-person | Create AI digital person images from prompts, turn them into short talking videos, and optionally run LoRA tasks. |
+| chanjing-text-to-digital-person | Create AI digital person images from prompts, turn them into short talking videos. |
 | chanjing-ai-creation | Chanjing AI creation Open API client: submit tasks, poll status, list/get tasks, optional download; reads/writes `credentials.json`. |
 | chanjing-video-translation | Create video translation tasks and list supported target languages. |
 | chanjing-openapi-tools | Query labels, consumption, prices and file details; manage multipart uploads; generate creative Briefings. |

@@ -13,11 +13,6 @@ MOTION_RUNNING = {"Ready", "Generating", "Queued"}
 MOTION_SUCCESS = {"Success"}
 MOTION_FAILED = {"Error", "Fail"}
 
-LORA_RUNNING = {"Queued", "Published", "Generating"}
-LORA_SUCCESS = {"Success"}
-LORA_FAILED = {"Fail"}
-
-
 def api_get(token, path, query=None):
     query = query or {}
     suffix = ""
@@ -63,15 +58,6 @@ def get_motion_task(token, unique_id):
 
 def list_motion_tasks(token, page=1, page_size=10):
     return api_get(token, "/open/v1/aigc/motion/task/page", {"page": page, "page_size": page_size})
-
-
-def get_lora_task(token, lora_id):
-    return api_get(token, "/open/v1/aigc/lora/task", {"lora_id": lora_id})
-
-
-def list_lora_tasks(token, page=1, page_size=10):
-    return api_get(token, "/open/v1/aigc/lora/task/page", {"page": page, "page_size": page_size})
-
 
 def first_output_url(data):
     urls = (data or {}).get("output_url") or []
